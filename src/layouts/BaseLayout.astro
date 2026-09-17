@@ -7,6 +7,8 @@ import {
   attraction,
   galleryImageUrls,
   heroImageUrl,
+  ogImageAlt,
+  ogImageUrl,
   siteConfig,
 } from '../config/site';
 
@@ -41,7 +43,7 @@ const pageOgTitle =
 const pageOgDescription =
   ogDescription ??
   `高雄${attraction.shortName}Visitor Guide：位置地址、開放時間、交通路線、${attraction.area}園區亮點與 Google 地圖使用者評價同步資料。`;
-const ogImageAlt = `${attraction.displayName} 主視覺：${attraction.city}${attraction.locality}的都市森林公園`;
+const ogImageShareAlt = `${ogImageAlt}：${attraction.city}${attraction.locality}的都市森林公園`;
 
 const attractionId = `${siteConfig.baseUrl}/#attraction`;
 
@@ -55,7 +57,11 @@ const attractionLd = {
   '@type': 'TouristAttraction',
   '@id': attractionId,
   name: attraction.displayName,
-  alternateName: [...attraction.altNames, `${attraction.city}${attraction.fullName}`],
+  alternateName: [
+    ...attraction.altNames,
+    `${attraction.locality}${attraction.fullName}`,
+    `Kaohsiung Central Park Cianjin`,
+  ],
   description: attraction.description,
   url: `${siteConfig.baseUrl}/`,
   image: [heroImageUrl, ...galleryImageUrls],
@@ -182,19 +188,19 @@ const faqLd = {
     <meta property="og:description" content={pageOgDescription} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={siteConfig.locale} />
-    <meta property="og:image" content={heroImageUrl} />
-    <meta property="og:image:secure_url" content={heroImageUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:secure_url" content={ogImageUrl} />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:image:alt" content={ogImageShareAlt} />
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageOgTitle} />
     <meta name="twitter:description" content={pageOgDescription} />
-    <meta name="twitter:image" content={heroImageUrl} />
-    <meta name="twitter:image:alt" content={ogImageAlt} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={ogImageShareAlt} />
 
     <!-- 地理實體訊號 -->
     <meta name="geo.region" content={attraction.googleRegionCode} />
@@ -215,7 +221,8 @@ const faqLd = {
     <link rel="manifest" href={siteConfig.manifestPath} />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="/favicon-16.png" sizes="16x16" type="image/png" />
-    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" sizes="180x180" />
+    <link rel="icon" href="/icons/icon-192.png" sizes="192x192" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
 
     <link rel="preload" as="image" href="/images/hero-park.jpg" />
 

@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import AboutSection from '../components/AboutSection.astro';
+import HighlightsSection from '../components/HighlightsSection.astro';
+import LocationSection from '../components/LocationSection.astro';
+import NearbySection from '../components/NearbySection.astro';
+import HistorySection from '../components/HistorySection.astro';
+import VisitTipsSection from '../components/VisitTipsSection.astro';
+import ReviewsSection from '../components/ReviewsSection.astro';
+import FaqSection from '../components/FaqSection.astro';
+import SourcesSection from '../components/SourcesSection.astro';
+---
+
+<BaseLayout includeFaq={true}>
+  <Hero />
+  <AboutSection />
+  <HighlightsSection />
+  <LocationSection />
+  <NearbySection />
+  <HistorySection />
+  <VisitTipsSection />
+  <ReviewsSection />
+  <FaqSection />
+  <SourcesSection />
+</BaseLayout>

@@ -1,0 +1,100 @@
+---
+import StarRating from './StarRating.astro';
+import { attraction } from '../config/site';
+
+/**
+ * 引用 Google 地圖使用者評價。
+ * 依 Google 的使用規範：評分與評價只保留在頁面展示，來源與同步時間明確標示，
+ * 且不輸出 aggregateRating / Review 到任何結構化資料（JSON-LD）。
+ */
+const ratingValue = attraction.rating.toFixed(1);
+const reviewCount = attraction.reviewCount.toLocaleString('zh-TW');
+---
+
+<section id="reviews" class="anchor-offset bg-white py-16">
+  <div class="mx-auto max-w-6xl px-4">
+    <div class="card-surface overflow-hidden">
+      <div class="flex flex-wrap items-start justify-between gap-4 border-b border-stone-200 p-6 sm:p-8">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Ratings & reviews</p>
+          <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+            {attraction.fullName}的評分與評價
+          </h2>
+          <p class="mt-3 max-w-2xl text-sm leading-relaxed text-stone-600">
+            評價來自谷歌地圖使用者評價；本頁僅同步{attraction.displayName}（{attraction.category}）的整體評分與評價筆數，未列出個別評論全文。
+          </p>
+        </div>
+        <span
+          class="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-800 ring-1 ring-emerald-200"
+        >
+          評價來自谷歌地圖使用者評價
+        </span>
+      </div>
+
+      <div class="grid gap-4 p-6 sm:grid-cols-3 sm:p-8">
+        <div class="rounded-2xl border border-stone-200 bg-stone-50 p-5">
+          <p class="text-xs font-bold uppercase tracking-wide text-stone-500">
+            Google 地圖評分 Rating
+          </p>
+          <p class="mt-2 flex items-baseline gap-2">
+            <span
+              class="text-4xl font-extrabold text-stone-900"
+              aria-label={`Google 地圖使用者評價 ${ratingValue} 分，滿分 ${attraction.ratingOutOf} 分`}
+              >{ratingValue}</span
+            >
+            <span class="text-sm text-stone-500">/ {attraction.ratingOutOf}</span>
+          </p>
+          <StarRating
+            value={attraction.rating}
+            outOf={attraction.ratingOutOf}
+            class="mt-2 text-xl text-amber-400"
+          />
+          <p class="mt-2 text-xs text-stone-500">同步時間 {attraction.reviewSyncLabel}</p>
+        </div>
+
+        <div class="rounded-2xl border border-stone-200 bg-stone-50 p-5">
+          <p class="text-xs font-bold uppercase tracking-wide text-stone-500">
+            評價筆數 Reviews
+          </p>
+          <p class="mt-2 text-4xl font-extrabold text-stone-900">{reviewCount}</p>
+          <p class="mt-3 text-xs text-stone-500">谷歌地圖使用者評價總數</p>
+        </div>
+
+        <div class="rounded-2xl border border-stone-200 bg-stone-50 p-5">
+          <p class="text-xs font-bold uppercase tracking-wide text-stone-500">Google 地圖分類</p>
+          <p class="mt-2 text-xl font-bold text-stone-900">{attraction.category}</p>
+          <p class="mt-3 break-all text-xs text-stone-500">Plus Code：{attraction.plusCode}</p>
+        </div>
+      </div>
+
+      <!-- 來源標示：評分旁必須出現同步出處、時間與查看全部評價連結 -->
+      <div class="border-t border-stone-200 px-6 py-5 sm:px-8">
+        <p class="text-xs leading-relaxed text-stone-500">
+          {attraction.reviewSyncLine} ·
+          <a
+            href={attraction.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2 transition hover:text-emerald-600"
+            >點擊查看谷歌地圖全部評價↗</a
+          >
+        </p>
+        <p class="mt-2 text-xs leading-relaxed text-stone-500">{attraction.reviewSourceNote}</p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4 px-6 pb-8 sm:px-8">
+        <a
+          href={attraction.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full bg-emerald-700 px-6 py-3 text-sm font-bold text-white transition hover:bg-emerald-800"
+        >
+          在谷歌地圖查看全部評價 ↗
+        </a>
+        <p class="text-xs text-stone-500">
+          評價僅於本頁展示，未寫入任何結構化資料（JSON-LD）；實際內容與最新分數請以 Google 地圖為準。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

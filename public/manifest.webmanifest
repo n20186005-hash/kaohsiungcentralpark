@@ -1,0 +1,67 @@
+{
+  "id": "/",
+  "name": "高雄中央公園 Kaohsiung Central Park 參觀指南",
+  "short_name": "高雄中央公園",
+  "description": "高雄中央公園（Kaohsiung Central Park）位於高雄市前金區，佔地約 12.7 公頃、24 小時免費開放。本站提供位置地圖、捷運公車交通、園區亮點、周邊景點與同步自 Google 地圖使用者評價的最新評分。",
+  "lang": "zh-Hant-TW",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fafaf9",
+  "theme_color": "#234d3c",
+  "categories": ["travel", "navigation", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "地圖與交通",
+      "short_name": "交通",
+      "description": "查看高雄中央公園的位置地圖與捷運、公車路線",
+      "url": "/#location"
+    },
+    {
+      "name": "評分與評價",
+      "short_name": "評價",
+      "description": "同步自 Google 地圖使用者評價的最新評分",
+      "url": "/#reviews"
+    },
+    {
+      "name": "常見問答",
+      "short_name": "FAQ",
+      "description": "門票、開放時間與造訪方式的常見問題",
+      "url": "/#faq"
+    }
+  ]
+}

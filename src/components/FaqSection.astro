@@ -1,0 +1,33 @@
+---
+import { faqItems } from '../data/faq';
+import { attraction } from '../config/site';
+---
+
+<section id="faq" class="anchor-offset border-t border-stone-200 bg-stone-100 py-16">
+  <div class="mx-auto max-w-4xl px-4">
+    <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">FAQ</p>
+    <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+      {attraction.shortName}常見問答（Frequently Asked Questions）
+    </h2>
+    <p class="mt-4 text-base leading-relaxed text-stone-600">
+      關於{attraction.displayName}的位置、門票、交通與歷史，以下是旅客最常問的問題。
+    </p>
+
+    <div class="mt-10 space-y-3">
+      {
+        faqItems.map((item, index) => (
+          <details
+            open={index === 0}
+            class="card-surface px-6 py-4 transition [&_summary::-webkit-details-marker]:hidden"
+          >
+            <summary class="flex cursor-pointer items-center justify-between gap-4 text-base font-bold text-stone-900">
+              <span>{item.question}</span>
+              <span aria-hidden="true" class="shrink-0 text-emerald-700">＋</span>
+            </summary>
+            <p class="mt-3 text-sm leading-relaxed text-stone-600">{item.answer}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

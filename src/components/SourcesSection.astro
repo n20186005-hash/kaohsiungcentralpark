@@ -1,0 +1,138 @@
+---
+import { attraction, imageCredits, siteConfig } from '../config/site';
+
+const year = new Date().getFullYear();
+const commonsUrl = 'https://commons.wikimedia.org/wiki/Category:Central_Park,_Kaohsiung';
+const wikipediaUrl = 'https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%A4%AE%E5%85%AC%E5%9C%92_(%E9%AB%98%E9%9B%84%E5%B8%82)';
+const wikiEnUrl = 'https://en.wikipedia.org/wiki/Central_Park_(Kaohsiung)';
+
+const uniqueLicenses = Array.from(new Set(imageCredits.map(item => item.license))).join('、');
+const contributors = Array.from(new Set(imageCredits.map(item => item.author))).join('、');
+---
+
+<section id="sources" class="anchor-offset py-16">
+  <div class="mx-auto max-w-6xl px-4">
+    <div class="rounded-3xl border border-stone-200 bg-stone-100 p-6 sm:p-10">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Sources</p>
+      <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+        資料來源 Sources & Attribution
+      </h2>
+      <p class="mt-4 max-w-3xl text-sm leading-relaxed text-stone-600">
+        本頁所有事實性內容皆引用下列公開來源；若與官方公告不同，請以官方網站與 Google 地圖的最新資訊為準。
+      </p>
+
+      <dl class="mt-8 space-y-4">
+        <!-- 評價 · 同步時間 -->
+        <div class="rounded-2xl border border-stone-200 bg-white p-5">
+          <dt class="text-sm font-bold text-stone-900">
+            評價 · 同步時間 {attraction.reviewSyncLabel}
+          </dt>
+          <dd class="mt-2 text-sm leading-relaxed text-stone-600">
+            Google 地圖使用者評價：<span class="font-semibold text-stone-900"
+              >{attraction.rating} / {attraction.ratingOutOf}</span
+            > 分，共 <span class="font-semibold text-stone-900">{attraction.reviewCountLabel}</span>
+            ；{attraction.reviewSourceNote}。以上數值同步自 Google 地圖使用者評價，同步時間 {attraction.reviewSyncLabel}；版權歸原作者與
+            Google 地圖所有。
+          </dd>
+          <dd class="mt-3">
+            <a
+              href={attraction.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-sm font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2 transition hover:text-emerald-600"
+              >點擊查看谷歌地圖全部評價 ↗</a
+            >
+          </dd>
+        </div>
+
+        <!-- Google 地圖景點頁 -->
+        <div class="rounded-2xl border border-stone-200 bg-white p-5">
+          <dt class="text-sm font-bold text-stone-900">Google 地圖景點頁</dt>
+          <dd class="mt-2 text-sm leading-relaxed text-stone-600">
+            {attraction.displayName}的地址、座標（{attraction.lat}, {attraction.lng}）、Plus Code
+            與分類（{attraction.category}）取自 Google 地圖：
+            <a
+              href={attraction.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+              >{attraction.mapsUrl} ↗</a
+            >
+          </dd>
+        </div>
+
+        <!-- 官方旅遊 / 政府入口 -->
+        <div class="rounded-2xl border border-stone-200 bg-white p-5">
+          <dt class="text-sm font-bold text-stone-900">
+            官方旅遊資訊 {attraction.countryEn} / {attraction.stateEn} Official Tourism Portal
+          </dt>
+          <dd class="mt-2 text-sm leading-relaxed text-stone-600">
+            如需官方公告與區域旅遊資訊，請造訪
+            <a
+              href={attraction.govtTourismUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+              >{attraction.govtTourismLabel}</a
+            >
+            與
+            <a
+              href={attraction.govtMainUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+              >{attraction.govtMainLabel}</a
+            >。
+          </dd>
+        </div>
+
+        <!-- 百科用途 references -->
+        <div class="rounded-2xl border border-stone-200 bg-white p-5">
+          <dt class="text-sm font-bold text-stone-900">歷史與園區資料</dt>
+          <dd class="mt-2 text-sm leading-relaxed text-stone-600">
+            公園面積、啟用年份與 R9 車站設計等資料參考中文維基百科《<a
+              href={wikipediaUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+              >中央公園（高雄市）</a
+            >》與英文維基百科《<a
+              href={wikiEnUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+              >Central Park (Kaohsiung)</a
+            >》（CC BY-SA 4.0）。
+          </dd>
+        </div>
+
+        <!-- 影像來源 -->
+        <div class="rounded-2xl border border-stone-200 bg-white p-5">
+          <dt class="text-sm font-bold text-stone-900">影像來源與授權</dt>
+          <dd class="mt-2 text-sm leading-relaxed text-stone-600">
+            本站照片取自
+            <a
+              href={commonsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+              >Wikimedia Commons</a
+            >，授權條款包含 {uniqueLicenses}；原作者 {contributors}。完整清單見各圖說與
+            <a href="/photo-credits" class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+              >影像版權資訊</a
+            >。
+          </dd>
+        </div>
+      </dl>
+
+      <p class="mt-8 text-xs leading-relaxed text-stone-500">
+        {siteConfig.brandDomain} 為非官方旅遊指南，與 Google LLC 及高雄市政府無隸屬關係。Google 地圖內容版權歸
+        Google LLC 與原評價作者所有。
+      </p>
+      <p class="mt-2 text-xs text-stone-500">
+        {attraction.displayName} · {attraction.city}{attraction.locality} · {attraction.state} ·
+        {attraction.country} · © {year}
+      </p>
+    </div>
+  </div>
+</section>

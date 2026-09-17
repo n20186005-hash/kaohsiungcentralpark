@@ -1,0 +1,73 @@
+---
+import { attraction } from '../config/site';
+
+const timeline = [
+  {
+    year: '1936',
+    title: '都市計畫預留綠地',
+    body: '日治時期的高雄都市計畫已在今日的園址構想並預留公園用地，戰後續稱為「第十五號公園」。',
+  },
+  {
+    year: '1976',
+    title: '公園正式成立',
+    body: '因興建高雄地下街與仁愛公園（今二二八和平公園），原中山體育場與前金游泳池遷至此址，並由扶輪社認養而有「扶輪公園」之名。',
+  },
+  {
+    year: '1990s',
+    title: '體育設施轉為森林公園',
+    body: '在環保團體建議下，配合高雄捷運紅線工程，由高雄捷運公司出資拆除體育場與泳池，改造成今日的草地與林蔭園景。',
+  },
+  {
+    year: '2008',
+    title: '捷運 R9 中央公園站啟用',
+    body: '由英國建築師 Richard Rogers 團隊設計的中央公園站落成，曲面玻璃出入口成為高雄最具辨識度的現代建築地標。',
+  },
+  {
+    year: '2014',
+    title: '護樹運動',
+    body: '西北角的市立圖書館李科永紀念圖書館興建計畫因移樹爭議，引發「中央公園護樹護地聯盟」的護樹行動，促使市府重新檢討公園用地開發。',
+  },
+  {
+    year: '今日',
+    title: '高雄的都市之肺',
+    body: `${attraction.area}的園區維持 24 小時免費開放，結合水舞表演、街頭演出與環湖步道，是${attraction.city}市民日常與旅客行程中的核心綠地。`,
+  },
+];
+---
+
+<section id="history" class="anchor-offset border-y border-stone-200 bg-white py-16">
+  <div class="mx-auto max-w-6xl px-4">
+    <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">History</p>
+    <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+      {attraction.fullName}的歷史沿革與意義（History & Significance of {attraction.fullNameEn}）
+    </h2>
+    <p class="mt-4 max-w-3xl text-base leading-relaxed text-stone-600">
+      {attraction.shortName}的身世幾乎就是{attraction.city}的都市發展史：從日治時期的計畫綠地、體育場時期，到配合捷運工程而重生的森林公園，每一次身分轉換都記錄著這座城市的成長。
+    </p>
+
+    <ol class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        timeline.map(item => (
+          <li class="card-surface p-6">
+            <p class="inline-flex rounded-full bg-emerald-700 px-3 py-1 text-xs font-bold text-white">
+              {item.year}
+            </p>
+            <h3 class="mt-4 text-lg font-bold text-stone-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-stone-600">{item.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="mt-8 text-sm leading-relaxed text-stone-500">
+      更多官方旅遊與城市資訊，請參考
+      <a
+        href={attraction.govtTourismUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2 transition hover:text-emerald-600"
+        >{attraction.govtTourismLabel}</a
+      >。
+    </p>
+  </div>
+</section>

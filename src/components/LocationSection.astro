@@ -1,0 +1,120 @@
+---
+import { attraction, transport } from '../config/site';
+
+const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+  `${attraction.displayName} ${attraction.addressFull}`
+)}`;
+---
+
+<section id="location" class="anchor-offset border-y border-stone-200 bg-stone-100 py-16">
+  <div class="mx-auto max-w-6xl px-4">
+    <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Location & Access</p>
+    <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+      {attraction.fullName}的位置與交通方式（How to Visit {attraction.shortNameEn} in {attraction.cityEn}）
+    </h2>
+    <p class="mt-4 max-w-3xl text-base leading-relaxed text-stone-600">
+      {attraction.displayName}位於{attraction.country}{attraction.city}{attraction.locality}，四周被{attraction.boundaryRoads.join('、')}環繞。捷運紅線 R9 中央公園站就在園區東側，出站步行 1 分鐘即可抵達草地。
+    </p>
+
+    <div class="mt-10 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+      <div class="space-y-6">
+        <div class="card-surface p-6">
+          <h3 class="text-lg font-bold text-stone-900">地址與座標</h3>
+          <dl class="mt-4 space-y-3 text-sm">
+            <div class="flex flex-wrap gap-2">
+              <dt class="w-24 shrink-0 text-stone-500">完整地址</dt>
+              <dd class="font-medium text-stone-800">{attraction.addressFull}</dd>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <dt class="w-24 shrink-0 text-stone-500">Street</dt>
+              <dd class="font-medium text-stone-800">
+                {attraction.streetAddressEn}, {attraction.localityEn}, {attraction.cityEn} {attraction.postalCode}, {attraction.countryEn}
+              </dd>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <dt class="w-24 shrink-0 text-stone-500">Plus Code</dt>
+              <dd class="font-medium text-stone-800">{attraction.plusCode}</dd>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <dt class="w-24 shrink-0 text-stone-500">經緯度</dt>
+              <dd class="font-medium text-stone-800">
+                {attraction.lat}, {attraction.lng} · Plus Code {attraction.plusCode.split(' ')[0]}
+              </dd>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <dt class="w-24 shrink-0 text-stone-500">實體層級</dt>
+              <dd class="font-medium text-stone-800">
+                {attraction.fullName} → {attraction.city}{attraction.locality} → {attraction.state} → {attraction.country}（{attraction.countryCode}）
+              </dd>
+            </div>
+          </dl>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a
+              href={directionsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="rounded-full bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800"
+              >Google 地圖導航 ↗</a
+            >
+            <a
+              href={attraction.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="rounded-full border border-stone-300 bg-white px-5 py-2.5 text-sm font-semibold text-stone-700 transition hover:border-emerald-600 hover:text-emerald-800"
+              >在地圖查看{attraction.shortName} ↗</a
+            >
+          </div>
+        </div>
+
+        <div class="card-surface p-6">
+          <h3 class="text-lg font-bold text-stone-900">怎麼去</h3>
+          <ul class="mt-4 space-y-5">
+            {
+              transport.map(item => (
+                <li class="border-l-2 border-emerald-600/70 pl-4">
+                  <p class="flex items-center gap-2">
+                    <span class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">
+                      {item.mode}
+                    </span>
+                    <span class="text-sm font-bold text-stone-900">{item.title}</span>
+                  </p>
+                  <ul class="mt-2 space-y-1.5 text-sm leading-relaxed text-stone-600">
+                    {item.lines.map(line => (
+                      <li>{line}</li>
+                    ))}
+                  </ul>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+
+      <div class="lg:sticky lg:top-24 lg:self-start">
+        <!-- 地圖嵌入：Google 地圖 iframe -->
+        <div class="card-surface overflow-hidden">
+          <iframe
+            src={attraction.mapsEmbedSrc}
+            title={`${attraction.displayName}地圖（Google Maps）`}
+            width="100%"
+            height="450"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            class="h-[450px] w-full"></iframe>
+          <div class="flex flex-wrap items-center justify-between gap-2 border-t border-stone-200 px-5 py-3">
+            <p class="text-xs text-stone-500">地圖來源：Google Maps</p>
+            <a
+              href={attraction.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-xs font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+              >在 Google 地圖開啟更大範圍 ↗</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

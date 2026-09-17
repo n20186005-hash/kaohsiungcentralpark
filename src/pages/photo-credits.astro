@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { imageCredits, attraction } from '../config/site';
+
+const files: Record<string, { title: string; desc: string }> = {
+  'hero-park': { title: '園區主視覺', desc: '成蔭步道與草地的園景' },
+  'park-aerial': { title: '高視角眺望', desc: '由建築物俯瞰整片園區綠地' },
+  'park-greenery': { title: '綠籬與林蔭', desc: '整齊修剪的綠籬與喬木步道' },
+  'park-lawn': { title: '草地與活動空間', desc: '民眾休憩的大片草地' },
+  playground: { title: '兒童遊戲場', desc: '溜滑梯、沙坑與體健設施' },
+  'park-hill': { title: '草坡景觀', desc: '微起伏地形與樹蔭' },
+  'park-marker': { title: '入口意象', desc: '園區指標與街道家具' },
+  'lake-01': { title: '生態池一景', desc: '湖面與水生植物' },
+  'lake-02': { title: '生態池與環湖步道', desc: '散步、賞鳥的主要路線' },
+  'pond-reflection': { title: '水池倒影', desc: '水面映照樹木與天空' },
+  'station-exterior': { title: '捷運站出入口', desc: 'R9 中央公園站曲面玻璃建築' },
+  'station-garden': { title: '捷運站庭園', desc: '站體上方的草坡庭園' },
+  'station-entrance': { title: '捷運站出口', desc: '通往公園的階梯與草坪' },
+  'station-r9': { title: 'R9 車站站體', desc: '紅線車站的整體外觀' },
+};
+---
+
+<BaseLayout
+  title={`影像版權資訊 · ${attraction.displayName}參觀指南`}
+  description={`${attraction.displayName}指南所使用的照片皆取自 Wikimedia Commons 的自由授權影像，本頁列出檔名、作者與授權條款。`}
+  canonicalPath="/photo-credits"
+>
+  <section class="mx-auto max-w-5xl px-4 py-16">
+    <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Photo credits</p>
+    <h1 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+      影像版權資訊
+    </h1>
+    <p class="mt-4 max-w-3xl text-base leading-relaxed text-stone-600">
+      本指南的實景照片皆取自 Wikimedia Commons 的自由授權影像。依授權條款標示作者與(CC / CC0)資訊如下，若您是影像權利人並希望調整標示方式，請透過本頁資訊與我們聯絡。
+    </p>
+
+    <div class="mt-10 card-surface divide-y divide-stone-100">
+      {
+        imageCredits.map(item => (
+          <div class="grid gap-2 px-6 py-4 sm:grid-cols-[1.2fr_1fr_0.8fr] sm:items-center">
+            <div>
+              <p class="text-sm font-bold text-stone-900">
+                {files[item.key]?.title ?? item.key}
+                <span class="ml-2 font-mono text-xs font-normal text-stone-500">
+                  /images/{item.key}.jpg
+                </span>
+              </p>
+              <p class="text-xs text-stone-500">{files[item.key]?.desc ?? ''}</p>
+            </div>
+            <p class="text-sm text-stone-700">
+              <span class="text-stone-500">作者：</span>
+              {item.author}
+            </p>
+            <p class="text-sm">
+              <span class="text-stone-500">授權：</span>
+              <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-800">
+                {item.license}
+              </span>
+            </p>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="mt-8 text-sm leading-relaxed text-stone-600">
+      原始影像可於
+      <a
+        href="https://commons.wikimedia.org/wiki/Category:Central_Park,_Kaohsiung"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+        >Wikimedia Commons：Central Park, Kaohsiung</a
+      > 瀏覽。Google 地圖的評分與評價資料版權歸原作者與 Google 地圖所有，同步時間 2026 年 9 月。
+    </p>
+  </section>
+</BaseLayout>

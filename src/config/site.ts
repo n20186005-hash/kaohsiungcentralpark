@@ -333,9 +333,13 @@ export const imageCredits = [
 /** 首圖與 OG 圖片（絕對網址供 JSON-LD / OG 使用） */
 export const heroImagePath = '/images/hero-park.jpg';
 export const heroImageUrl = `${siteConfig.baseUrl}${heroImagePath}`;
+/** 1200×630 社群分享封面 */
+export const ogImagePath = '/images/og-cover.jpg';
+export const ogImageUrl = `${siteConfig.baseUrl}${ogImagePath}`;
+export const ogImageAlt = `${attraction.displayName}（${attraction.fullNameEn}）園區主視覺`;
 export const galleryImageUrls = [
-  `${siteConfig.baseUrl}/images/hero-park.jpg`,
   `${siteConfig.baseUrl}/images/park-aerial.jpg`,
   `${siteConfig.baseUrl}/images/station-exterior.jpg`,
   `${siteConfig.baseUrl}/images/lake-01.jpg`,
+  `${siteConfig.baseUrl}/images/playground.jpg`,
 ] as const;

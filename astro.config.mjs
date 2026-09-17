@@ -3,7 +3,7 @@ import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
-const site = process.env.PUBLIC_SITE_URL || undefined;
+const site = process.env.PUBLIC_SITE_URL || 'https://kaohsiungcentralpark.com';
 const cloudflareBuild = process.env.ASTRO_ADAPTER === 'cloudflare';
 
 export default defineConfig({
