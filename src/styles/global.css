@@ -1,0 +1,42 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans:
+    'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', system-ui, -apple-system,
+    'Segoe UI', sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-stone-50);
+    color: var(--color-stone-800);
+    font-family: var(--font-sans);
+    line-height: 1.75;
+  }
+
+  ::selection {
+    background-color: var(--color-emerald-200);
+    color: var(--color-emerald-900);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-emerald-600);
+    outline-offset: 2px;
+  }
+}
+
+@utility anchor-offset {
+  scroll-margin-top: 5.5rem;
+}
+
+@utility card-surface {
+  background-color: #fff;
+  border: 1px solid color-mix(in oklab, var(--color-stone-300) 60%, transparent);
+  border-radius: 1.5rem;
+  box-shadow: 0 1px 2px rgb(28 25 23 / 0.04);
+}

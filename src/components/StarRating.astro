@@ -1,0 +1,22 @@
+---
+interface Props {
+  /** 評分值（例如 4.5） */
+  value: number;
+  outOf?: number;
+  class?: string;
+}
+
+const { value, outOf = 5, class: className = '' } = Astro.props;
+const percent = Math.max(0, Math.min(100, (value / outOf) * 100));
+const stars = '★'.repeat(outOf);
+---
+
+<span class={`relative inline-block leading-none ${className}`} aria-hidden="true">
+  <span class="text-current opacity-25">{stars}</span>
+  <span
+    class="absolute inset-0 overflow-hidden whitespace-nowrap"
+    style={`width:${percent}%;`}
+  >
+    {stars}
+  </span>
+</span>

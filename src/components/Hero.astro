@@ -1,0 +1,142 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+import StarRating from './StarRating.astro';
+import { attraction, heroImagePath } from '../config/site';
+
+const ratingText = `${attraction.rating} / ${attraction.ratingOutOf}`;
+
+const facts = [
+  { label: '公園面積', value: attraction.area },
+  { label: '開放時間', value: attraction.openingHours },
+  { label: '門票', value: '免費' },
+  { label: '交通', value: '捷運 R9 中央公園站' },
+];
+---
+
+<section class="relative isolate overflow-hidden bg-emerald-950">
+  <img
+    src={heroImagePath}
+    alt={`${attraction.displayName}（${attraction.fullNameEn}）— 位於${attraction.country}${attraction.city}${attraction.locality}的高雄中央公園主視覺`}
+    width="1600"
+    height="1067"
+    fetchpriority="high"
+    decoding="async"
+    class="absolute inset-0 -z-10 h-full w-full object-cover"
+  />
+  <div
+    aria-hidden="true"
+    class="absolute inset-0 -z-10 bg-gradient-to-b from-emerald-950/90 via-emerald-950/75 to-emerald-950/85"
+  >
+  </div>
+
+  <div class="mx-auto max-w-6xl px-4 py-14 sm:py-20">
+    <Breadcrumbs inverse />
+
+    <div class="mt-6 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+      <div>
+        <span
+          class="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-100 ring-1 ring-emerald-300/30"
+        >
+          {attraction.country}{attraction.city}{attraction.locality} · 全年免費開放
+        </span>
+
+        <h1 class="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
+          {attraction.displayName}（{attraction.city}）
+        </h1>
+        <p class="mt-1 text-base font-semibold text-emerald-100">
+          {attraction.legalName} · {attraction.fullNameEn}
+        </p>
+
+        {/* 4.1 首段等位聲明：將域名含義（短名）與官方全稱在語義上等同 */}
+        <p class="mt-6 max-w-2xl text-base leading-relaxed text-emerald-50/90 sm:text-lg">
+          歡迎來到<b class="font-semibold text-white">{attraction.fullName}</b
+          >（{attraction.fullNameEn}，一般稱呼為<b class="font-semibold text-white"
+            >{attraction.shortName}</b
+          >）。它坐落在{attraction.country}{attraction.city}{attraction.locality}的核心地帶，佔地{attraction.area}，是{attraction.city}最主要的城市綠洲，也是旅客造訪本市的起點。
+        </p>
+
+        <dl class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {
+            facts.map(fact => (
+              <div class="rounded-2xl border border-emerald-300/25 bg-emerald-900/40 p-3">
+                <dt class="text-[11px] font-medium uppercase tracking-wide text-emerald-200/80">
+                  {fact.label}
+                </dt>
+                <dd class="mt-1 text-sm font-bold text-white">{fact.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a
+            href="#location"
+            class="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-emerald-900 transition hover:bg-emerald-50"
+          >
+            查看地圖與交通
+          </a>
+          <a
+            href="#reviews"
+            class="rounded-full border border-emerald-300/40 px-5 py-2.5 text-sm font-semibold text-emerald-50 transition hover:bg-emerald-800/60"
+          >
+            最新評分與評價
+          </a>
+        </div>
+      </div>
+
+      <!-- 評分與評價：同步自 Google 地圖使用者評價（僅頁面呈現，不寫入 JSON-LD） -->
+      <div
+        class="rounded-3xl border border-emerald-300/25 bg-emerald-950/60 p-6 shadow-2xl backdrop-blur"
+      >
+        <p class="text-xs font-semibold uppercase tracking-wide text-emerald-200/80">
+          遊客評分 · Visitor rating
+        </p>
+        <div class="mt-3 flex items-end gap-3">
+          <span
+            class="text-5xl font-extrabold leading-none text-white"
+            aria-label={`Google 地圖使用者評價 ${ratingText}`}>{attraction.rating}</span
+          >
+          <div class="pb-1">
+            <StarRating value={attraction.rating} outOf={attraction.ratingOutOf} class="text-2xl text-amber-300" />
+            <p class="mt-1 text-xs text-emerald-100/80">滿分 {attraction.ratingOutOf} 分</p>
+          </div>
+        </div>
+        <p class="mt-3 text-sm font-semibold text-emerald-50">
+          {attraction.reviewCountLabel} · Google 地圖使用者評價
+        </p>
+
+        {/* 來源標示（規定：評分旁必須註明出處與查看全部評價的連結） */}
+        <p class="mt-2 text-[11px] leading-relaxed text-emerald-200/80">
+          {attraction.reviewSyncLine} ·
+          <a
+            href={attraction.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-semibold text-white underline decoration-emerald-300/50 underline-offset-2 transition hover:text-amber-200"
+            >點擊查看谷歌地圖全部評價↗</a
+          >
+        </p>
+
+        <dl class="mt-6 space-y-3 border-t border-emerald-300/20 pt-5 text-sm">
+          <div class="flex justify-between gap-3">
+            <dt class="text-emerald-200/80">Google 地圖分類</dt>
+            <dd class="font-semibold text-white">{attraction.category}</dd>
+          </div>
+          <div class="flex justify-between gap-3">
+            <dt class="text-emerald-200/80">開放狀態</dt>
+            <dd class="font-semibold text-white">{attraction.admission}</dd>
+          </div>
+        </dl>
+
+        <a
+          href={attraction.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-bold text-emerald-950 transition hover:bg-emerald-400"
+        >
+          在谷歌地圖查看全部評價 ↗
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

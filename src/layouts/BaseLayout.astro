@@ -1,0 +1,257 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { faqItems } from '../data/faq';
+import {
+  attraction,
+  galleryImageUrls,
+  heroImageUrl,
+  siteConfig,
+} from '../config/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  /** 是否輸出 FAQPage 結構化資料（僅首頁） */
+  includeFaq?: boolean;
+  canonicalPath?: string;
+}
+
+const {
+  title,
+  description,
+  ogTitle,
+  ogDescription,
+  includeFaq = false,
+  canonicalPath = '/',
+} = Astro.props;
+
+const canonical = new URL(canonicalPath, siteConfig.baseUrl).href;
+const pageTitle =
+  title ??
+  `${attraction.displayName}（${attraction.city}）— 高雄前金區都市森林・地圖與交通指南`;
+const pageDescription =
+  description ??
+  `${attraction.displayName}（${attraction.fullNameEn}）位於${attraction.country}${attraction.city}${attraction.locality}，佔地${attraction.area}，24 小時免費開放。本站提供位置地圖、捷運公車交通、園區亮點、周邊景點與來自 Google 地圖使用者的最新評分。`;
+const pageOgTitle =
+  ogTitle ?? `${attraction.displayName} — ${attraction.city}參觀指南`;
+const pageOgDescription =
+  ogDescription ??
+  `高雄${attraction.shortName}Visitor Guide：位置地址、開放時間、交通路線、${attraction.area}園區亮點與 Google 地圖使用者評價同步資料。`;
+const ogImageAlt = `${attraction.displayName} 主視覺：${attraction.city}${attraction.locality}的都市森林公園`;
+
+const attractionId = `${siteConfig.baseUrl}/#attraction`;
+
+// ---------------------------------------------------------------------------
+// 結構化資料（Schema.org / JSON-LD）
+// 注意：Google 地圖的評分與評價僅在頁面上呈現，依需求刻意不寫入任何
+// aggregateRating / Review 節點，來源標示請見 Reviews 與 Sources 區塊。
+// ---------------------------------------------------------------------------
+const attractionLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TouristAttraction',
+  '@id': attractionId,
+  name: attraction.displayName,
+  alternateName: [...attraction.altNames, `${attraction.city}${attraction.fullName}`],
+  description: attraction.description,
+  url: `${siteConfig.baseUrl}/`,
+  image: [heroImageUrl, ...galleryImageUrls],
+  isAccessibleForFree: true,
+  publicAccess: true,
+  touristType: ['Families', 'Photographers', 'Cyclists', 'Walkers'],
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: attraction.streetAddress,
+    addressLocality: attraction.locality,
+    addressRegion: attraction.state,
+    postalCode: attraction.postalCode,
+    addressCountry: attraction.countryCode,
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: attraction.lat,
+    longitude: attraction.lng,
+  },
+  hasMap: attraction.mapsUrl,
+  sameAs: [attraction.mapsUrl, attraction.govtTourismUrl],
+  additionalProperty: [
+    {
+      '@type': 'PropertyValue',
+      name: '公園面積',
+      value: attraction.area,
+    },
+    {
+      '@type': 'PropertyValue',
+      name: '開放時間',
+      value: attraction.openingHours,
+    },
+    {
+      '@type': 'PropertyValue',
+      name: '管理機關',
+      value: attraction.manager,
+    },
+  ],
+};
+
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${siteConfig.baseUrl}/#website`,
+  name: siteConfig.name,
+  alternateName: siteConfig.brandDomain,
+  url: `${siteConfig.baseUrl}/`,
+  inLanguage: siteConfig.lang,
+  publisher: { '@id': attractionId },
+  about: { '@id': attractionId },
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  '@id': `${canonical}#breadcrumb`,
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: `${attraction.fullName} ${attraction.fullNameEn}`,
+      item: canonical,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: `${attraction.city}${attraction.locality}`,
+      item: `${siteConfig.baseUrl}/#location`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: attraction.state,
+      item: `${siteConfig.baseUrl}/#location`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 4,
+      name: `${attraction.country} ${attraction.countryEn}`,
+      item: `${siteConfig.baseUrl}/#location`,
+    },
+  ],
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  '@id': `${canonical}#faq`,
+  mainEntity: faqItems.map(item => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+---
+
+<!doctype html>
+<html lang={siteConfig.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- TDK -->
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta
+      name="keywords"
+      content={`${attraction.fullName},${attraction.fullNameEn},高雄${attraction.shortName},中央公園捷運站,高雄景點,高雄前金區,${attraction.cityEn} ${attraction.shortNameEn}`}
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="author" content={siteConfig.name} />
+
+    <!-- Canonical -->
+    <link rel="canonical" href={canonical} />
+    <link rel="home" href={`${siteConfig.baseUrl}/`} />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageOgTitle} />
+    <meta property="og:description" content={pageOgDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={siteConfig.locale} />
+    <meta property="og:image" content={heroImageUrl} />
+    <meta property="og:image:secure_url" content={heroImageUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageOgTitle} />
+    <meta name="twitter:description" content={pageOgDescription} />
+    <meta name="twitter:image" content={heroImageUrl} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+
+    <!-- 地理實體訊號 -->
+    <meta name="geo.region" content={attraction.googleRegionCode} />
+    <meta
+      name="geo.placename"
+      content={`${attraction.locality}, ${attraction.city}, ${attraction.country}`}
+    />
+    <meta name="geo.position" content={`${attraction.lat};${attraction.lng}`} />
+    <meta name="ICBM" content={`${attraction.lat}, ${attraction.lng}`} />
+
+    <!-- PWA -->
+    <meta name="theme-color" content={siteConfig.themeColor} />
+    <meta name="application-name" content={siteConfig.shortName} />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content={attraction.displayName} />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="manifest" href={siteConfig.manifestPath} />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/favicon-16.png" sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" sizes="180x180" />
+
+    <link rel="preload" as="image" href="/images/hero-park.jpg" />
+
+    <!-- Structured data -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(attractionLd)}></script>
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(websiteLd)}></script>
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbLd)}></script>
+    {
+      includeFaq && (
+        <script type="application/ld+json" is:inline set:html={JSON.stringify(faqLd)}></script>
+      )
+    }
+
+    <slot name="head" />
+  </head>
+  <body class="min-h-screen bg-stone-50 antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-emerald-700 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+      >跳至主要內容</a
+    >
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <script is:inline>
+      // PWA：註冊 Service Worker 以提供離線瀏覽（失敗不影響頁面功能）
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js').catch(function () {
+            /* 離線支援為選用功能，註冊失敗時靜默略過 */
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

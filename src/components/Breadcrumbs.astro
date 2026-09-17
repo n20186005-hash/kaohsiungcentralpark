@@ -1,0 +1,48 @@
+---
+import { attraction } from '../config/site';
+
+interface Props {
+  /** 深色背景（Hero）上的反白樣式 */
+  inverse?: boolean;
+}
+
+const { inverse = false } = Astro.props;
+
+const crumbs = [
+  { label: `${attraction.fullName} ${attraction.fullNameEn}`, href: '/' },
+  { label: `${attraction.city}${attraction.locality}`, href: '#location' },
+  { label: attraction.state, href: '#location' },
+  { label: `${attraction.country} ${attraction.countryEn}`, href: '#location' },
+];
+---
+
+<nav
+  aria-label="麵包屑"
+  class={inverse
+    ? 'text-xs text-emerald-50/80'
+    : 'text-xs text-stone-500'}
+>
+  <ol class="flex flex-wrap items-center gap-1">
+    {
+      crumbs.map((crumb, index) => (
+        <li class="flex items-center gap-1">
+          {index > 0 && (
+            <span aria-hidden="true" class={inverse ? 'text-emerald-200/50' : 'text-stone-300'}>
+              ›
+            </span>
+          )}
+          <a
+            href={crumb.href}
+            class={
+              inverse
+                ? 'underline decoration-emerald-200/40 underline-offset-2 transition hover:text-white'
+                : 'underline decoration-stone-300 underline-offset-2 transition hover:text-emerald-800'
+            }
+          >
+            {crumb.label}
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</nav>
