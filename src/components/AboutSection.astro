@@ -1,0 +1,79 @@
+---
+import { attraction } from '../config/site';
+
+const info = [
+  { label: '官方全稱', value: `${attraction.fullName} ${attraction.fullNameEn}` },
+  { label: '通用簡稱', value: `${attraction.shortName} ${attraction.shortNameEn}` },
+  { label: '所在位置', value: `${attraction.country}${attraction.city}${attraction.locality}` },
+  { label: '完整地址', value: attraction.addressFull },
+  { label: 'Google 地圖分類', value: attraction.category },
+  { label: '面積', value: attraction.area },
+  { label: '開放時間', value: attraction.openingHours },
+  { label: '門票', value: attraction.admission },
+  { label: '管理機關', value: attraction.manager },
+  { label: 'Plus Code', value: attraction.plusCode },
+  { label: '座標', value: `${attraction.lat}, ${attraction.lng}` },
+  { label: '四周道路', value: attraction.boundaryRoads.join('、') },
+];
+---
+
+<section id="about" class="anchor-offset mx-auto max-w-6xl px-4 py-16">
+  <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+    <div>
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">About</p>
+      <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+        認識{attraction.fullName}{attraction.fullNameEn}（{attraction.city}）
+      </h2>
+
+      {/* 4.1 首段等位聲明：域名含義（短名）＝ 官方全稱 */}
+      <p class="mt-6 text-base leading-relaxed text-stone-700">
+        歡迎來到<b class="font-semibold text-stone-900">{attraction.fullName}</b>（{attraction.fullNameEn}），也就是大家口中的「<b
+          class="font-semibold text-stone-900">{attraction.shortName}</b
+        >」（{attraction.shortNameEn}）。公園位於{attraction.country}{attraction.city}{attraction.locality}，四周被{attraction.boundaryRoads.join('、')}環繞，佔地{attraction.area}，是{attraction.city}最重要的城市綠洲，也是旅客造訪本地時的第一站。
+      </p>
+
+      <p class="mt-4 text-base leading-relaxed text-stone-700">
+        這座{attraction.category}把原先的體育場舊址改造成起伏草地、成蔭步道與生態池，白天是通勤族穿越市區的綠色捷徑，黃昏後則變成家庭散步、路跑與街頭表演的場域。園區全年 24 小時免費開放，並以捷運紅線
+        R9 中央公園站與市内商圈無縫串連，步行即可抵達{attraction.fullNameEn}旁的購物與餐飲據點。
+      </p>
+
+      <p class="mt-4 text-base leading-relaxed text-stone-700">
+        若你想在緊湊的市區行程中找回一段散步時間，{attraction.shortName}提供的是最不費力的選項：從捷運站出口走到環湖步道只需數分鐘，途中會經過{attraction.fullNameEn}最受歡迎的水舞廣場、綠籬迷宮與戶外舞台。
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href="#highlights"
+          class="rounded-full bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800"
+          >看看園區有什麼</a
+        >
+        <a
+          href={attraction.govtTourismUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded-full border border-stone-300 px-5 py-2.5 text-sm font-semibold text-stone-700 transition hover:border-emerald-600 hover:text-emerald-800"
+          >{attraction.govtTourismLabel} ↗</a
+        >
+      </div>
+    </div>
+
+    <dl class="card-surface overflow-hidden">
+      <div class="border-b border-stone-200 bg-emerald-50/60 px-6 py-4">
+        <dt class="text-sm font-bold text-emerald-900">景點基本資料 Attraction facts</dt>
+        <dd class="mt-1 text-xs text-emerald-800/80">
+          {attraction.displayName} · {attraction.postalCode} {attraction.cityEn}
+        </dd>
+      </div>
+      <div class="divide-y divide-stone-100">
+        {
+          info.map(row => (
+            <div class="grid grid-cols-[7.5rem_1fr] gap-3 px-6 py-3 text-sm">
+              <dt class="text-stone-500">{row.label}</dt>
+              <dd class="font-medium text-stone-800">{row.value}</dd>
+            </div>
+          ))
+        }
+      </div>
+    </dl>
+  </div>
+</section>
