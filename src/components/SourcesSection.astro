@@ -1,5 +1,6 @@
 ---
 import { attraction, imageCredits, siteConfig } from '../config/site';
+import { normalsLabel } from '../data/seasons';
 
 const year = new Date().getFullYear();
 const commonsUrl = 'https://commons.wikimedia.org/wiki/Category:Central_Park,_Kaohsiung';
@@ -103,6 +104,28 @@ const contributors = Array.from(new Set(imageCredits.map(item => item.author))).
               class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
               >Central Park (Kaohsiung)</a
             >》（CC BY-SA 4.0）。
+          </dd>
+        </div>
+
+        <!-- 天氣與氣候統計來源 -->
+        <div class="rounded-2xl border border-stone-200 bg-white p-5">
+          <dt class="text-sm font-bold text-stone-900">天氣預報與氣候統計</dt>
+          <dd class="mt-2 text-sm leading-relaxed text-stone-600">
+            即時天氣與未來 7 日預報引用
+            <a
+              href="https://open-meteo.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+              >Open-Meteo</a
+            >
+            開放氣象資料，於伺服器端取得；季度遊覽策略表中的逐月氣溫、降水量、降水日數、相對濕度與日照時數，取自{normalsLabel}。遇颱風或豪雨警報請以<a
+              href="https://www.cwa.gov.tw/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+              >交通部中央氣象署</a
+            >與高雄市政府公告為準。
           </dd>
         </div>
 

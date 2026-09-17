@@ -16,6 +16,7 @@ export interface WeatherNow {
   feelsLike: number;
   humidity: number;
   wind: number;
+  gust: number;
   uv: number;
   precip: number;
   isDay: boolean;
@@ -32,10 +33,15 @@ export interface WeatherDay {
   weekday: string;
   max: number;
   min: number;
+  feelsMax: number;
+  humidityMean: number;
   precipSum: number;
   precipProb: number;
   uvMax: number;
   windMax: number;
+  gustMax: number;
+  sunrise: string;
+  sunset: string;
   code: number;
   condition: string;
   icon: string;
@@ -49,9 +55,6 @@ export interface WeatherSnapshot {
   days: WeatherDay[];
   sunrise: string;
   sunset: string;
-  /** 今日是否建議攜帶雨具 */
-  umbrellaToday: boolean;
-  advice: string[];
 }
 
 interface OpenMeteoResponse {
@@ -120,8 +123,10 @@ function buildRequestUrl(lat: number, lng: number) {
   const params = new URLSearchParams({
     latitude: String(lat),
     longitude: String(lng),
-    current: 'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m,uv_index',
-    daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,uv_index_max,wind_speed_10m_max,sunrise,sunset',
+    current:
+      'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m,wind_gusts_10m,uv_index',
+    daily:
+      'weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,relative_humidity_2m_mean,precipitation_sum,precipitation_probability_max,uv_index_max,wind_speed_10m_max,wind_gusts_10m_max,sunrise,sunset',
     timezone: TIMEZONE,
     forecast_days: '7',
   });
@@ -163,10 +168,15 @@ function buildSnapshot(raw: OpenMeteoResponse): WeatherSnapshot | null {
       weekday: weekdayFormatter.format(date),
       max: Number(numberAt(daily?.temperature_2m_max, index).toFixed(0)),
       min: Number(numberAt(daily?.temperature_2m_min, index).toFixed(0)),
+      feelsMax: Number(numberAt(daily?.apparent_temperature_max, index).toFixed(0)),
+      humidityMean: Number(numberAt(daily?.relative_humidity_2m_mean, index).toFixed(0)),
       precipSum: Number(numberAt(daily?.precipitation_sum, index).toFixed(1)),
       precipProb: Number(numberAt(daily?.precipitation_probability_max, index).toFixed(0)),
       uvMax: Number(numberAt(daily?.uv_index_max, index).toFixed(0)),
       windMax: Number(numberAt(daily?.wind_speed_10m_max, index).toFixed(0)),
+      gustMax: Number(numberAt(daily?.wind_gusts_10m_max, index).toFixed(0)),
+      sunrise: stringAt(daily?.sunrise, index).slice(11, 16),
+      sunset: stringAt(daily?.sunset, index).slice(11, 16),
       code,
       condition: info.label,
       icon: info.icon,
@@ -179,6 +189,7 @@ function buildSnapshot(raw: OpenMeteoResponse): WeatherSnapshot | null {
     feelsLike: Number((raw.current.apparent_temperature ?? 0).toFixed(0)),
     humidity: Number((raw.current.relative_humidity_2m ?? 0).toFixed(0)),
     wind: Number((raw.current.wind_speed_10m ?? 0).toFixed(0)),
+    gust: Number((raw.current.wind_gusts_10m ?? 0).toFixed(0)),
     uv: Number((raw.current.uv_index ?? 0).toFixed(0)),
     precip: Number((raw.current.precipitation ?? 0).toFixed(1)),
     isDay: Number(raw.current.is_day ?? 1) === 1,
@@ -188,56 +199,13 @@ function buildSnapshot(raw: OpenMeteoResponse): WeatherSnapshot | null {
     tone: describe(nowCode).tone,
   };
 
-  const umbrellaToday = days[0].precipProb >= 50 || days[0].precipSum >= 2;
-  const advice = buildAdvice(now, days[0], umbrellaToday);
-
   return {
     updatedAt: timeFormatter.format(new Date()),
     now,
     days,
     sunrise,
     sunset,
-    umbrellaToday,
-    advice,
   };
-}
-
-function buildAdvice(now: WeatherNow, today: WeatherDay, umbrella: boolean): string[] {
-  const list: string[] = [];
-
-  if (umbrella) {
-    list.push(`今日降雨機率約 ${today.precipProb}%，出門建議攜帶雨具，並把室內備案排進行程。`);
-  } else if (today.precipProb >= 25) {
-    list.push(`今日降雨機率約 ${today.precipProb}%，午後留意短暫陣雨，摺疊傘放背包更安心。`);
-  } else {
-    list.push('今日降雨機率偏低，適合安排環湖步道與草地行程。');
-  }
-
-  if (today.max >= 33) {
-    list.push(`白天高溫上看 ${today.max}°C，建議改走清晨 6–8 點與傍晚 5 點後兩段式行程，並補充水分。`);
-  } else if (today.max >= 29 && today.min >= 24) {
-    list.push(`高溫 ${today.max}°C、低溫 ${today.min}°C，悶熱感明顯，遮蔭步道與草地午後較舒適。`);
-  } else if (today.min <= 17) {
-    list.push(`清晨低溫約 ${today.min}°C，早晚溫差大，記得帶一件薄外套。`);
-  } else {
-    list.push(`高溫 ${today.max}°C、低溫 ${today.min}°C，是步行與長時間戶外活動的舒適區間。`);
-  }
-
-  if (today.uvMax >= 8) {
-    list.push(`紫外線指數達 ${today.uvMax}，屬過量級，請戴帽、擦防曬並盡量走林蔭段。`);
-  } else if (today.uvMax >= 6) {
-    list.push(`紫外線指數 ${today.uvMax}，正午前後建議遮陽帽與防曬乳。`);
-  }
-
-  if (today.windMax >= 30) {
-    list.push(`陣風可達 ${today.windMax} km/h，水舞表演與遮陽傘使用請留意風勢。`);
-  }
-
-  if (now.precip > 0) {
-    list.push('目前測得降雨，廣場地坪濕滑，行走階梯與池畔步道請放慢腳步。');
-  }
-
-  return list;
 }
 
 export async function getWeatherSnapshot(

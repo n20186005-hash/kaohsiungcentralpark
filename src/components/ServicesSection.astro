@@ -1,0 +1,51 @@
+---
+import { attraction } from '../config/site';
+import { visitorServices } from '../data/visitor-services';
+---
+
+<section id="services" class="anchor-offset py-16">
+  <div class="mx-auto max-w-6xl px-4">
+    <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Visitor services</p>
+    <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+      訪客服務與周邊設施（洗手間、停車、餐飲、住宿、
+      {attraction.city}市區機能）
+    </h2>
+    <p class="mt-4 max-w-3xl text-base leading-relaxed text-stone-600">
+      本站為非營利景點科普網站，以下僅以「設施類型」與「分布位置」做中立概述，不推薦任何特定店家或品牌。旅客可依自己的預算與偏好在{attraction.city}
+      {attraction.locality}周邊自行選擇。
+    </p>
+
+    <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      {
+        visitorServices.map(group => (
+          <section class="card-surface overflow-hidden">
+            <header class="flex items-center gap-3 border-b border-stone-200 px-5 py-4">
+              <span
+                class={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-xl ${group.tone}`}
+                aria-hidden="true"
+              >
+                {group.icon}
+              </span>
+              <div>
+                <h3 class="text-base font-bold text-stone-900">{group.title}</h3>
+                <p class="text-xs tracking-wide text-stone-500">{group.subtitle}</p>
+              </div>
+            </header>
+            <dl class="divide-y divide-stone-100">
+              {group.items.map(item => (
+                <div class="px-5 py-3">
+                  <dt class="text-sm font-bold text-stone-900">{item.label}</dt>
+                  <dd class="mt-1 text-xs leading-relaxed text-stone-600">{item.desc}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        ))
+      }
+    </div>
+
+    <p class="mt-8 text-xs leading-relaxed text-stone-500">
+      設施位置與營業時間可能隨管理單位調整而變動，出發前建議再確認一次；政府部門與營業商家的最新資訊請以官方公告為準。
+    </p>
+  </div>
+</section>

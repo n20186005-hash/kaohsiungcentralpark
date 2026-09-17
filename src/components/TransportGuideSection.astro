@@ -1,0 +1,80 @@
+---
+import { attraction } from '../config/site';
+import { ticketTips, transportRoutes } from '../data/transport-guide';
+---
+
+<section id="transport" class="anchor-offset border-t border-stone-200 bg-stone-100 py-16">
+  <div class="mx-auto max-w-6xl px-4">
+    <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">How to get here</p>
+    <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+      {attraction.fullName}交通攻略：怎麼到{attraction.shortName}？（Getting to
+      {attraction.shortNameEn}, {attraction.cityEn}）
+    </h2>
+    <p class="mt-4 max-w-3xl text-base leading-relaxed text-stone-600">
+      不論是從高雄國際機場、高鐵左營站、台鐵高雄車站，或自行開車前往，以下每一段動線都寫出轉乘位置、搭車方向與出站後的步行路線。車程與票價為一般狀況的區間值，實際以業者公告為準。
+    </p>
+
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+      {
+        transportRoutes.map(route => (
+          <article class="card-surface overflow-hidden">
+            <header class="flex items-start justify-between gap-4 border-b border-stone-200 px-6 py-5">
+              <div>
+                <span
+                  class={`inline-flex rounded-full px-2.5 py-1 text-xs font-bold ${route.badgeTone}`}
+                >
+                  {route.badge}
+                </span>
+                <h3 class="mt-3 text-lg font-bold text-stone-900">{route.origin}</h3>
+                <p class="text-xs tracking-wide text-stone-500">{route.originEn}</p>
+              </div>
+              <p class="shrink-0 text-right text-xs leading-relaxed text-stone-500">
+                {route.duration}
+                <br />
+                {route.cost}
+              </p>
+            </header>
+
+            <ol class="space-y-3 px-6 py-5">
+              {route.steps.map((step, index) => (
+                <li class="grid grid-cols-[1.5rem_1fr] gap-3 text-sm">
+                  <span class="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-700 text-xs font-bold text-white">
+                    {index + 1}
+                  </span>
+                  <div>
+                    <p class="font-bold text-stone-900">{step.label}</p>
+                    <p class="mt-1 leading-relaxed text-stone-600">{step.desc}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+
+            <footer class="border-t border-stone-200 bg-stone-50 px-6 py-4">
+              <p class="text-xs leading-relaxed text-stone-600">
+                <span class="font-bold text-stone-800">適合：</span>{route.suit}
+              </p>
+              <p class="mt-2 text-xs leading-relaxed text-stone-600">
+                <span class="font-bold text-stone-800">提醒：</span>{route.tip}
+              </p>
+            </footer>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        ticketTips.map(tip => (
+          <div class="card-surface p-5">
+            <h3 class="text-sm font-bold text-stone-900">{tip.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-stone-600">{tip.desc}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="mt-8 text-xs leading-relaxed text-stone-500">
+      路線調整、班次時刻與票價請以高雄市政府交通局、高雄捷運公司與各客運業者公告為準；連續假期與大型活動期間常有交通管制，建議提早出發。
+    </p>
+  </div>
+</section>

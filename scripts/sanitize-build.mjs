@@ -1,7 +1,9 @@
 import { readFile, writeFile, readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = new URL('../dist/', import.meta.url);
+// 直接使用 URL.pathname 在 Windows 會變成 /H:/... 這種無效路徑，必須轉成本地路徑。
+const root = fileURLToPath(new URL('../dist/', import.meta.url));
 const replacements = [
   ['example.com', 'invalid.invalid'],
   ['localhost', '127.0.0.1'],
@@ -27,4 +29,4 @@ async function sanitize(file) {
   if (text !== original) await writeFile(file, text);
 }
 
-await walk(root.pathname);
+await walk(root);

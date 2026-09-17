@@ -3,11 +3,11 @@
   "name": "kaohsiung-central-park",
   "compatibility_date": "2025-09-01",
   "compatibility_flags": ["nodejs_compat"],
-  // @astrojs/cloudflare 14 會將 SSR worker 輸出到 dist/server/entry.mjs，
-  // 靜態資源（sitemap、圖片、PWA 圖示與 SW）則輸出到 dist/client。
-  // 設定需與 dist/server/wrangler.json（adapter 建置時自動產生）一致。
-  "no_bundle": true,
-  "main": "./dist/server/entry.mjs",
+  // @astrojs/cloudflare 14 會把 SSR worker 輸出到 dist/server，靜態資源
+  // （sitemap、圖片、PWA 圖示與 Service Worker）輸出到 dist/client。
+  // main 指向套件提供的 worker 進入點（啟動後再由它載入 dist 產物），
+  // 因此無論 dist 是否存在都能完成建置，也不會破壞 wrangler deploy。
+  "main": "@astrojs/cloudflare/entrypoints/server",
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist/client"

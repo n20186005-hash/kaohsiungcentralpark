@@ -1,0 +1,121 @@
+---
+import { attraction } from '../config/site';
+import { audienceRoutes, genericRoutes } from '../data/routes';
+---
+
+<section id="routes" class="anchor-offset border-t border-stone-200 bg-white py-16">
+  <div class="mx-auto max-w-6xl px-4">
+    <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Suggested routes</p>
+    <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+      {attraction.fullName}推薦遊覽路線：半日、全日與三條主題動線
+    </h2>
+    <p class="mt-4 max-w-3xl text-base leading-relaxed text-stone-600">
+      {attraction.displayName}的主要步道為平坦環狀系統，繞行一圈約 1.1 公里。以下路線以「步行時間最少、樹蔭最多、設施最好用」為原則安排，可依體力與天氣自由取捨。
+    </p>
+
+    <!-- 半日 / 全日 -->
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+      {
+        genericRoutes.map(route => (
+          <article class="card-surface overflow-hidden">
+            <header class="border-b border-stone-200 bg-emerald-50/60 px-6 py-5">
+              <h3 class="text-lg font-bold text-stone-900">{route.title}</h3>
+              <p class="mt-1 text-sm text-emerald-900/80">{route.subtitle}</p>
+              <dl class="mt-4 grid gap-3 text-xs sm:grid-cols-3">
+                <div>
+                  <dt class="text-stone-500">建議時間</dt>
+                  <dd class="font-semibold text-stone-900">{route.duration}</dd>
+                </div>
+                <div>
+                  <dt class="text-stone-500">步行距離</dt>
+                  <dd class="font-semibold text-stone-900">{route.distance}</dd>
+                </div>
+                <div>
+                  <dt class="text-stone-500">體力需求</dt>
+                  <dd class="font-semibold text-stone-900">{route.energy}</dd>
+                </div>
+              </dl>
+            </header>
+
+            <ol class="space-y-0 px-6 py-5">
+              {route.stops.map(stop => (
+                <li class="relative border-l-2 border-emerald-200 pb-5 pl-6 last:pb-0">
+                  <span
+                    aria-hidden="true"
+                    class="absolute -left-[7px] top-1 h-3 w-3 rounded-full bg-emerald-600"
+                  />
+                  <p class="text-xs font-bold tracking-widest text-emerald-700">{stop.time}</p>
+                  <p class="mt-1 text-sm font-bold text-stone-900">{stop.title}</p>
+                  <p class="mt-1 text-sm leading-relaxed text-stone-600">{stop.desc}</p>
+                </li>
+              ))}
+            </ol>
+
+            <footer class="border-t border-stone-200 px-6 py-4">
+              <p class="text-xs leading-relaxed text-stone-600">{route.best}</p>
+            </footer>
+          </article>
+        ))
+      }
+    </div>
+
+    <!-- 族群主題動線 -->
+    <h3 class="mt-14 text-xl font-bold text-stone-900">
+      按族群設計：親子家庭 / 攝影自然 / 低體力無障礙
+    </h3>
+    <p class="mt-2 text-sm leading-relaxed text-stone-600">
+      同樣一座公園，不同族群有完全不同的走法。以下三條動線以「設施使用」與「體力負擔」為主要差異點設計。
+    </p>
+
+    <div class="mt-6 grid gap-6 lg:grid-cols-3">
+      {
+        audienceRoutes.map(route => (
+          <article class={`card-surface overflow-hidden ring-1 ${route.tone}`}>
+            <header class="px-6 py-5">
+              <p class="text-2xl" aria-hidden="true">{route.icon}</p>
+              <h4 class="mt-2 text-lg font-bold text-stone-900">{route.title}</h4>
+              <p class="mt-1 text-sm text-stone-600">{route.crowd}</p>
+              <dl class="mt-4 grid gap-2 text-xs">
+                <div class="flex justify-between gap-3">
+                  <dt class="text-stone-500">建議時間</dt>
+                  <dd class="text-right font-semibold text-stone-900">{route.duration}</dd>
+                </div>
+                <div class="flex justify-between gap-3">
+                  <dt class="text-stone-500">步行距離</dt>
+                  <dd class="text-right font-semibold text-stone-900">{route.distance}</dd>
+                </div>
+                <div class="flex justify-between gap-3">
+                  <dt class="text-stone-500">體力需求</dt>
+                  <dd class="text-right font-semibold text-stone-900">{route.energy}</dd>
+                </div>
+              </dl>
+              <p class="mt-4 text-sm leading-relaxed text-stone-700">{route.focus}</p>
+            </header>
+
+            <ol class="space-y-3 border-t border-stone-200 px-6 py-5 text-sm">
+              {route.stops.map((stop, index) => (
+                <li class="flex gap-3">
+                  <span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-stone-200 text-[11px] font-bold text-stone-700">
+                    {index + 1}
+                  </span>
+                  <span class="leading-relaxed text-stone-700">{stop}</span>
+                </li>
+              ))}
+            </ol>
+
+            <footer class="border-t border-stone-200 bg-stone-50 px-6 py-4">
+              <ul class="space-y-2 text-xs leading-relaxed text-stone-600">
+                {route.notes.map(note => (
+                  <li class="flex gap-2">
+                    <span aria-hidden="true" class="text-emerald-600">✓</span>
+                    <span>{note}</span>
+                  </li>
+                ))}
+              </ul>
+            </footer>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -111,3 +111,21 @@ temp/
 # Manus version file (auto-generated, not part of source)
 client/public/__manus__/version.json
 .project-config.json
+
+# ---------------------------------------------------------------------------
+# 手動部署到 Cloudflare Workers 時，下列檔案不需要上傳 / 不需要進版本庫
+# ---------------------------------------------------------------------------
+
+# Astro 產生的路由型別與快取
+.astro/
+
+# Wrangler / Miniflare 本機模擬產生的目錄與狀態
+.wrangler/
+.mf/
+.dev.vars
+
+# Cloudflare 自動產生的 Workers 型別檔
+worker-configuration.d.ts
+
+# 來源對應檔，部署到 Workers 時用不到
+**/*.js.map

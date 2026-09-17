@@ -3,10 +3,16 @@ import { attraction, siteConfig } from '../config/site';
 
 const nav = [
   { href: '#about', label: '景點介紹' },
+  { href: '#weather', label: '天氣預報' },
+  { href: '#seasons', label: '季節策略' },
   { href: '#highlights', label: '園區亮點' },
-  { href: '#location', label: '位置交通' },
+  { href: '#services', label: '設施服務' },
+  { href: '#routes', label: '推薦路線' },
+  { href: '#location', label: '位置地圖' },
+  { href: '#transport', label: '交通攻略' },
   { href: '#nearby', label: '周邊景點' },
   { href: '#history', label: '歷史沿革' },
+  { href: '#science', label: '生態科普' },
   { href: '#reviews', label: '評分評價' },
   { href: '#faq', label: '常見問答' },
 ];
@@ -28,12 +34,12 @@ const nav = [
       </span>
     </a>
 
-    <nav aria-label="頁面導覽" class="ml-auto hidden items-center gap-1 lg:flex">
+    <nav aria-label="頁面導覽" class="ml-auto hidden items-center gap-0.5 lg:flex">
       {
         nav.map(item => (
           <a
             href={item.href}
-            class="rounded-full px-3 py-2 text-sm font-medium text-stone-600 transition hover:bg-emerald-50 hover:text-emerald-800"
+            class="whitespace-nowrap rounded-full px-2.5 py-2 text-[13px] font-medium text-stone-600 transition hover:bg-emerald-50 hover:text-emerald-800"
           >
             {item.label}
           </a>

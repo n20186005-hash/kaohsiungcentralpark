@@ -10,8 +10,12 @@ export default defineConfig({
   site,
   output: cloudflareBuild ? 'server' : 'static',
   session: false,
-  // 搭配 wrangler.jsonc（main: 官方 server entrypoint、assets: ./dist）使用預設模式：
-  // 建置會產出 dist/_worker.js 與 dist 靜態資源，兩者皆由 Cloudflare 直接部署。
+  // 兩種建置情境：
+  // 1. 本地預覽／靜態託管：astro build（本檔預設），產出 dist/index.html 等靜態檔案，
+  //    直接由 astro preview 或任何靜態伺服器提供（缺少 index.html 會讓 / 變成 404）。
+  // 2. Cloudflare Workers 部署：ASTRO_ADAPTER=cloudflare astro build，
+  //    產出 dist/client（靜態資源）+ dist/server（SSR worker），
+  //    wrangler deploy 會自動改用 dist/server/wrangler.json，不再需要 dist/index.html。
   adapter: cloudflareBuild ? cloudflare({ imageService: 'passthrough' }) : undefined,
   integrations: site ? [sitemap()] : [],
   vite: {
