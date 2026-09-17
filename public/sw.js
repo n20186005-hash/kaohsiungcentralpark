@@ -7,7 +7,7 @@
 const VERSION = 'v1-2026-09';
 const STATIC_CACHE = `static-${VERSION}`;
 const RUNTIME_CACHE = `runtime-${VERSION}`;
-const OFFLINE_URL = '/offline.html';
+const OFFLINE_URL = '/offline';
 
 const PRECACHE = [
   '/',
