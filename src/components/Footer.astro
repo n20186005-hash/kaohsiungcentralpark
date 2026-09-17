@@ -1,0 +1,97 @@
+---
+import { attraction, siteConfig } from '../config/site';
+
+const year = new Date().getFullYear();
+const anchors = [
+  { href: '#about', label: '景點介紹' },
+  { href: '#location', label: '位置交通' },
+  { href: '#nearby', label: '周邊景點' },
+  { href: '#history', label: '歷史沿革' },
+  { href: '#reviews', label: '評分評價' },
+  { href: '#faq', label: '常見問答' },
+  { href: '#sources', label: '資料來源' },
+];
+---
+
+<footer class="mt-20 border-t border-stone-200 bg-stone-900 text-stone-300">
+  <div class="mx-auto max-w-6xl px-4 py-12">
+    <div class="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+      <div>
+        <p class="flex items-center gap-2">
+          <span
+            aria-hidden="true"
+            class="grid h-9 w-9 place-items-center rounded-xl bg-emerald-600 text-sm font-bold text-white"
+            >央</span
+          >
+          <span class="text-base font-bold text-white">{attraction.displayName}</span>
+        </p>
+        <p class="mt-4 max-w-md text-sm leading-relaxed text-stone-400">
+          {siteConfig.brandDomain} 是{attraction.fullName}（{attraction.fullNameEn}，{attraction.cityEn}）的獨立參觀指南，整理位置地圖、交通路線、園區亮點與官方旅遊資訊連結，供旅客行前參考。
+        </p>
+        <p class="mt-4 text-xs leading-relaxed text-stone-500">
+          {attraction.fullName} → {attraction.city}{attraction.locality} → {attraction.state} →
+          {attraction.country} → {attraction.countryEn}
+        </p>
+      </div>
+
+      <nav aria-label="頁尾導覽">
+        <p class="text-xs font-semibold uppercase tracking-wide text-stone-500">本頁內容</p>
+        <ul class="mt-4 space-y-2 text-sm">
+          {
+            anchors.map(item => (
+              <li>
+                <a href={item.href} class="transition hover:text-emerald-300">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wide text-stone-500">外部連結</p>
+        <ul class="mt-4 space-y-2 text-sm">
+          <li>
+            <a
+              href={attraction.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="transition hover:text-emerald-300">Google 地圖：查看全部評價 ↗</a
+            >
+          </li>
+          <li>
+            <a
+              href={attraction.govtTourismUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="transition hover:text-emerald-300">{attraction.govtTourismLabel} ↗</a
+            >
+          </li>
+          <li>
+            <a
+              href={attraction.govtMainUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="transition hover:text-emerald-300">{attraction.govtMainLabel} ↗</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="mt-10 border-t border-stone-800 pt-6 text-xs leading-relaxed text-stone-500">
+      本站標示之 Google 地圖評分與評價數引用自 Google 地圖使用者評價（同步時間 2026 年 9 月），版權歸原作者與
+      Google 地圖所有；請以 <a
+        href={attraction.mapsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline decoration-stone-600 underline-offset-2">Google 地圖原始頁面</a
+      > 的最新資料為準。
+    </p>
+    <p class="mt-3 text-xs text-stone-600">
+      © {year} {siteConfig.name} · {siteConfig.brandDomain} · 非官方旅遊指南，與 Google LLC
+      無隸屬關係。
+    </p>
+  </div>
+</footer>
