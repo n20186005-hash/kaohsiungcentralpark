@@ -1,0 +1,543 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StarRating from '../../components/StarRating.astro';
+import FaqSection from '../../components/FaqSection.astro';
+import { attraction, heroImagePath, highlights, nearbyLandmarks, visitTips } from '../../config/site';
+
+const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+  `${attraction.fullNameEn} ${attraction.addressFull}`
+)}`;
+
+const facts = [
+  { label: 'Area', value: attraction.area },
+  { label: 'Hours', value: attraction.openingHours },
+  { label: 'Admission', value: 'Free' },
+  { label: 'MRT', value: 'KMRT R9 Central Park Station' },
+];
+
+const aboutInfo = [
+  { label: 'Official name', value: `${attraction.fullName} ${attraction.fullNameEn}` },
+  { label: 'Common name', value: `${attraction.shortName} ${attraction.shortNameEn}` },
+  { label: 'Location', value: `${attraction.country}${attraction.city}${attraction.locality}` },
+  { label: 'Full address', value: attraction.addressFull },
+  { label: 'Google Maps category', value: attraction.category },
+  { label: 'Area', value: attraction.area },
+  { label: 'Hours', value: attraction.openingHours },
+  { label: 'Admission', value: attraction.admission },
+  { label: 'Managed by', value: attraction.manager },
+  { label: 'Plus Code', value: attraction.plusCode },
+  { label: 'Coordinates', value: `${attraction.lat}, ${attraction.lng}` },
+  { label: 'Bounded by', value: attraction.boundaryRoads.join(', ') },
+];
+---
+
+<BaseLayout includeFaq={true} locale="en">
+  <!-- Hero -->
+  <section class="relative isolate overflow-hidden bg-emerald-950">
+    <img
+      src={heroImagePath}
+      alt={`${attraction.fullNameEn} — urban forest park in ${attraction.cityEn}, ${attraction.countryEn}`}
+      width="1600"
+      height="1067"
+      loading="eager"
+      decoding="async"
+      class="absolute inset-0 -z-10 h-full w-full object-cover"
+    />
+    <div
+      aria-hidden="true"
+      class="absolute inset-0 -z-10 bg-gradient-to-b from-emerald-950/90 via-emerald-950/75 to-emerald-950/85"
+    >
+    </div>
+
+    <div class="mx-auto max-w-6xl px-4 py-14 sm:py-20">
+      <div class="mt-6 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+        <div>
+          <span
+            class="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-100 ring-1 ring-emerald-300/30"
+          >
+            {attraction.country}{attraction.city}{attraction.locality} · Free & open 24 hours
+          </span>
+
+          <h1 class="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
+            {attraction.fullNameEn} ({attraction.cityEn})
+          </h1>
+          <p class="mt-1 text-base font-semibold text-emerald-100">
+            {attraction.legalName}
+          </p>
+
+          <p class="mt-6 max-w-2xl text-base leading-relaxed text-emerald-50/90 sm:text-lg">
+            Welcome to <b class="font-semibold text-white">{attraction.fullNameEn}</b> — also called
+            <b class="font-semibold text-white">{attraction.shortNameEn}</b>. It sits in the heart of
+            {attraction.cityEn} ({attraction.city}{attraction.locality}), covers {attraction.area}, and
+            is the city's main urban green oasis and the natural starting point for visitors.
+          </p>
+
+          <dl class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {
+              facts.map(fact => (
+                <div class="rounded-2xl border border-emerald-300/25 bg-emerald-900/40 p-3">
+                  <dt class="text-[11px] font-medium uppercase tracking-wide text-emerald-200/80">
+                    {fact.label}
+                  </dt>
+                  <dd class="mt-1 text-sm font-bold text-white">{fact.value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a
+              href="#location"
+              class="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-emerald-900 transition hover:bg-emerald-50"
+            >
+              Map & how to get here
+            </a>
+            <a
+              href="#reviews"
+              class="rounded-full border border-emerald-300/40 px-5 py-2.5 text-sm font-semibold text-emerald-50 transition hover:bg-emerald-800/60"
+            >
+              Latest rating & reviews
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="rounded-3xl border border-emerald-300/25 bg-emerald-950/60 p-6 shadow-2xl backdrop-blur"
+        >
+          <p class="text-xs font-semibold uppercase tracking-wide text-emerald-200/80">
+            Visitor rating
+          </p>
+          <div class="mt-3 flex items-end gap-3">
+            <span
+              class="text-5xl font-extrabold leading-none text-white"
+              aria-label={`Google Maps user rating ${attraction.rating}`}>{attraction.rating}</span
+            >
+            <div class="pb-1">
+              <StarRating value={attraction.rating} outOf={attraction.ratingOutOf} class="text-2xl text-amber-300" />
+              <p class="mt-1 text-xs text-emerald-100/80">out of {attraction.ratingOutOf}</p>
+            </div>
+          </div>
+          <p class="mt-3 text-sm font-semibold text-emerald-50">
+            {attraction.reviewCountLabel} · Google Maps user reviews
+          </p>
+          <p class="mt-2 text-[11px] leading-relaxed text-emerald-200/80">
+            {attraction.reviewSyncLine} ·
+            <a
+              href={attraction.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold text-white underline decoration-emerald-300/50 underline-offset-2 transition hover:text-amber-200"
+              >See all Google Maps reviews ↗</a
+            >
+          </p>
+
+          <dl class="mt-6 space-y-3 border-t border-emerald-300/20 pt-5 text-sm">
+            <div class="flex justify-between gap-3">
+              <dt class="text-emerald-200/80">Google Maps category</dt>
+              <dd class="font-semibold text-white">{attraction.categoryEn}</dd>
+            </div>
+            <div class="flex justify-between gap-3">
+              <dt class="text-emerald-200/80">Access</dt>
+              <dd class="font-semibold text-white">{attraction.admission}</dd>
+            </div>
+          </dl>
+
+          <a
+            href={attraction.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-bold text-emerald-950 transition hover:bg-emerald-400"
+          >
+            See all reviews on Google Maps ↗
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="anchor-offset mx-auto max-w-6xl px-4 py-16">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">About</p>
+        <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+          Getting to know {attraction.fullNameEn} ({attraction.cityEn})
+        </h2>
+
+        <p class="mt-6 text-base leading-relaxed text-stone-700">
+          Welcome to <b class="font-semibold text-stone-900">{attraction.fullNameEn}</b> — locally
+          known as <b class="font-semibold text-stone-900">{attraction.shortNameEn}</b>. The park lies
+          in {attraction.cityEn} ({attraction.city}{attraction.locality}), bordered by
+          {attraction.boundaryRoads.join(', ')}. Covering {attraction.area}, it is the city's most
+          important urban oasis and the first stop for many visitors.
+        </p>
+
+        <p class="mt-4 text-base leading-relaxed text-stone-700">
+          This {attraction.categoryEn} turned a former stadium site into rolling lawns, shaded paths
+          and an ecological pond. By day it is a green shortcut across the city; after dusk it
+          becomes a family stroll, jogging and street-performance venue. Free and open 24 hours, it
+          connects seamlessly with the KMRT Red Line R9 Central Park Station and nearby shopping
+          districts — just steps from the park's most popular Water Square, hedge labyrinth and
+          outdoor terrace.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a
+            href="#highlights"
+            class="rounded-full bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800"
+            >What's in the park</a
+          >
+          <a
+            href={attraction.govtTourismUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="rounded-full border border-stone-300 px-5 py-2.5 text-sm font-semibold text-stone-700 transition hover:border-emerald-600 hover:text-emerald-800"
+            >Kaohsiung Travel ↗</a
+          >
+        </div>
+      </div>
+
+      <dl class="card-surface overflow-hidden">
+        <div class="border-b border-stone-200 bg-emerald-50/60 px-6 py-4">
+          <dt class="text-sm font-bold text-emerald-900">Attraction facts</dt>
+          <dd class="mt-1 text-xs text-emerald-800/80">
+            {attraction.displayName} · {attraction.postalCode} {attraction.cityEn}
+          </dd>
+        </div>
+        <div class="divide-y divide-stone-100">
+          {
+            aboutInfo.map(row => (
+              <div class="grid grid-cols-[7.5rem_1fr] gap-3 px-6 py-3 text-sm">
+                <dt class="text-stone-500">{row.label}</dt>
+                <dd class="font-medium text-stone-800">{row.value}</dd>
+              </div>
+            ))
+          }
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Highlights -->
+  <section id="highlights" class="anchor-offset border-y border-stone-200 bg-stone-100 py-16">
+    <div class="mx-auto max-w-6xl px-4">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Highlights</p>
+      <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+        What to see in {attraction.shortNameEn}
+      </h2>
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          highlights.map(item => (
+            <article class="card-surface overflow-hidden">
+              <img
+                src={item.image}
+                alt={item.alt}
+                width="800"
+                height="600"
+                loading="lazy"
+                decoding="async"
+                class="h-44 w-full object-cover"
+              />
+              <div class="p-5">
+                <h3 class="text-base font-bold text-stone-900">{item.title}</h3>
+                <p class="mt-3 text-sm leading-relaxed text-stone-600">{item.desc}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Location & transport -->
+  <section id="location" class="anchor-offset border-y border-stone-200 bg-stone-100 py-16">
+    <div class="mx-auto max-w-6xl px-4">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Location & Access</p>
+      <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+        Where {attraction.shortNameEn} is & how to get there
+      </h2>
+      <p class="mt-4 max-w-3xl text-base leading-relaxed text-stone-600">
+        {attraction.fullNameEn} is in {attraction.cityEn} ({attraction.city}{attraction.locality}),
+        bordered by {attraction.boundaryRoads.join(', ')}. The KMRT Red Line R9 Central Park Station
+        sits on the park's east side — a 1-minute walk from the lawn.
+      </p>
+
+      <div class="mt-10 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+        <div class="space-y-6">
+          <div class="card-surface p-6">
+            <h3 class="text-lg font-bold text-stone-900">Address & coordinates</h3>
+            <dl class="mt-4 space-y-3 text-sm">
+              <div class="flex flex-wrap gap-2">
+                <dt class="w-24 shrink-0 text-stone-500">Full address</dt>
+                <dd class="font-medium text-stone-800">{attraction.addressFull}</dd>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <dt class="w-24 shrink-0 text-stone-500">Street</dt>
+                <dd class="font-medium text-stone-800">
+                  {attraction.streetAddressEn}, {attraction.localityEn}, {attraction.cityEn} {attraction.postalCode}, {attraction.countryEn}
+                </dd>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <dt class="w-24 shrink-0 text-stone-500">Plus Code</dt>
+                <dd class="font-medium text-stone-800">{attraction.plusCode}</dd>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <dt class="w-24 shrink-0 text-stone-500">Coordinates</dt>
+                <dd class="font-medium text-stone-800">
+                  {attraction.lat}, {attraction.lng} · Plus Code {attraction.plusCode.split(' ')[0]}
+                </dd>
+              </div>
+            </dl>
+            <div class="mt-5 flex flex-wrap gap-3">
+              <a
+                href={directionsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="rounded-full bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800"
+                >Google Maps directions ↗</a
+              >
+              <a
+                href={attraction.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="rounded-full border border-stone-300 bg-white px-5 py-2.5 text-sm font-semibold text-stone-700 transition hover:border-emerald-600 hover:text-emerald-800"
+                >Open in Google Maps ↗</a
+              >
+            </div>
+          </div>
+
+          <div class="card-surface p-6">
+            <h3 class="text-lg font-bold text-stone-900">How to get here</h3>
+            <ul class="mt-4 space-y-5">
+              <li class="border-l-2 border-emerald-600/70 pl-4">
+                <p class="flex items-center gap-2">
+                  <span class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">MRT</span>
+                  <span class="text-sm font-bold text-stone-900">KMRT Red Line R9 Central Park Station</span>
+                </p>
+                <ul class="mt-2 space-y-1.5 text-sm leading-relaxed text-stone-600">
+                  <li>Exit 1 leads directly onto the park lawn and Water Square. The station, designed by Richard Rogers' team, opened on 9 March 2008 with three exits.</li>
+                  <li>One stop from R10 Formosa Boulevard (Dome of Light); two stops from Kaohsiung Main Station.</li>
+                </ul>
+              </li>
+              <li class="border-l-2 border-emerald-600/70 pl-4">
+                <p class="flex items-center gap-2">
+                  <span class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">Bus</span>
+                  <span class="text-sm font-bold text-stone-900">Kaohsiung City Bus</span>
+                </p>
+                <ul class="mt-2 space-y-1.5 text-sm leading-relaxed text-stone-600">
+                  <li>"Central Park Station" on Zhongshan 1st Rd.: routes 12, 15, 52, 69, 72, 92, 100, 218 and the waterfront bus; Southeast Bus Red 25.</li>
+                  <li>"Urban Spotlight Arcade" on Wufu 3rd Rd.: routes 25, 76, 77 — enter from the park's south side.</li>
+                </ul>
+              </li>
+              <li class="border-l-2 border-emerald-600/70 pl-4">
+                <p class="flex items-center gap-2">
+                  <span class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">Car</span>
+                  <span class="text-sm font-bold text-stone-900">Driving & parking</span>
+                </p>
+                <ul class="mt-2 space-y-1.5 text-sm leading-relaxed text-stone-600">
+                  <li>From National Freeway 1 take Zhongzheng Interchange to Zhongzheng Rd., then Wufu Rd. to Zhongshan Rd.</li>
+                  <li>The park and nearby department stores have paid lots; spaces fill fast on holidays — consider parking near a station and taking the MRT.</li>
+                </ul>
+              </li>
+              <li class="border-l-2 border-emerald-600/70 pl-4">
+                <p class="flex items-center gap-2">
+                  <span class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">Walk</span>
+                  <span class="text-sm font-bold text-stone-900">On foot & by bike</span>
+                </p>
+                <ul class="mt-2 space-y-1.5 text-sm leading-relaxed text-stone-600">
+                  <li>The ring path is about 1.1 km (≈30 min) on flat permeable-brick trails, stroller- and wheelchair-friendly.</li>
+                  <li>It connects to the Urban Spotlight Arcade, Shinkuchan and the Kaohsiung Literature Library for a downtown stroll.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lg:sticky lg:top-24 lg:self-start">
+          <div class="card-surface overflow-hidden">
+            <iframe
+              src={attraction.mapsEmbedSrc}
+              title={`${attraction.fullNameEn} map (Google Maps)`}
+              width="100%"
+              height="450"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              class="h-[450px] w-full"></iframe>
+            <div class="flex flex-wrap items-center justify-between gap-2 border-t border-stone-200 px-5 py-3">
+              <p class="text-xs text-stone-500">Map source: Google Maps</p>
+              <a
+                href={attraction.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+                >Open a wider map in Google Maps ↗</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nearby -->
+  <section id="nearby" class="anchor-offset py-16">
+    <div class="mx-auto max-w-6xl px-4">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Around the park</p>
+      <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+        Landmarks & attractions near {attraction.shortNameEn}
+      </h2>
+      <p class="mt-4 max-w-3xl text-base leading-relaxed text-stone-600">
+        While visiting {attraction.fullNameEn}, explore nearby historical landmarks and popular spots
+        such as the <b class="font-semibold text-stone-800">Urban Spotlight Arcade</b> and the
+        <b class="font-semibold text-stone-800">Shinkuchan shopping district</b> — all within a
+        10-minute walk, perfect for a half-day stroll.
+      </p>
+
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          nearbyLandmarks.map(item => (
+            <article class="card-surface overflow-hidden">
+              <img
+                src={item.image}
+                alt={item.alt}
+                width="800"
+                height="600"
+                loading="lazy"
+                decoding="async"
+                class="h-44 w-full object-cover"
+              />
+              <div class="p-5">
+                <h3 class="text-base font-bold text-stone-900">
+                  {item.name}
+                  <span class="mt-1 block text-xs font-medium tracking-wide text-stone-500">
+                    {item.nameEn}
+                  </span>
+                </h3>
+                <p class="mt-3 text-sm leading-relaxed text-stone-600">{item.desc}</p>
+                <p class="mt-3 inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">
+                  {item.distance}
+                </p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Visit tips -->
+  <section id="services" class="anchor-offset border-t border-stone-200 bg-stone-100 py-16">
+    <div class="mx-auto max-w-6xl px-4">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Facilities & tips</p>
+      <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+        Facilities & visitor tips
+      </h2>
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          visitTips.map(tip => (
+            <div class="card-surface p-5">
+              <h3 class="text-sm font-bold text-stone-900">{tip.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-stone-600">{tip.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- History -->
+  <section id="history" class="anchor-offset py-16">
+    <div class="mx-auto max-w-6xl px-4">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">History</p>
+      <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+        The story of {attraction.fullNameEn}
+      </h2>
+      <div class="mt-6 max-w-3xl space-y-4 text-base leading-relaxed text-stone-700">
+        <p>
+          The park's origins trace back to reserved green space in the 1936 urban plan under Japanese
+          rule (numbered "Park No. 15" during the provincial-city era). It was officially established
+          in 1976 and called Rotary Park after its adoption by the Rotary Club; the site was formerly
+          Zhongshan Stadium and the Cianjin Swimming Pool.
+        </p>
+        <p>
+          In the 1990s, with environmental groups' advocacy and alongside the KMRT Red Line project,
+          it was redeveloped into today's forest park by the KMRT Corporation — a rare case where a
+          transit construction became the catalyst for a major urban green space.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews -->
+  <section id="reviews" class="anchor-offset border-y border-stone-200 bg-stone-100 py-16">
+    <div class="mx-auto max-w-4xl px-4 text-center">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Reviews</p>
+      <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+        What visitors say
+      </h2>
+      <div class="mt-8 flex flex-col items-center justify-center gap-3">
+        <span class="text-6xl font-extrabold text-stone-900" aria-label={`Google Maps rating ${attraction.rating} of ${attraction.ratingOutOf}`}>
+          {attraction.rating}
+        </span>
+        <StarRating value={attraction.rating} outOf={attraction.ratingOutOf} class="text-3xl text-amber-400" />
+        <p class="text-sm font-semibold text-stone-700">{attraction.reviewCountLabel} · Google Maps</p>
+        <a
+          href={attraction.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-2 inline-flex items-center gap-2 rounded-full bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800"
+        >
+          Read all reviews on Google Maps ↗
+        </a>
+      </div>
+      <p class="mt-6 text-xs leading-relaxed text-stone-500">
+        {attraction.reviewSyncLine}. Figures are quoted from Google Maps user reviews; copyright belongs
+        to the original authors and Google Maps.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ (reuses bilingual data) -->
+  <FaqSection locale="en" />
+
+  <!-- Sources -->
+  <section id="sources" class="anchor-offset border-t border-stone-200 bg-stone-100 py-16">
+    <div class="mx-auto max-w-4xl px-4">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Sources</p>
+      <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+        Sources & references
+      </h2>
+      <ul class="mt-6 space-y-3 text-sm">
+        <li>
+          <a
+            href={attraction.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+            >Google Maps — {attraction.fullNameEn}</a
+          >
+        </li>
+        <li>
+          <a
+            href={attraction.govtTourismUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+            >Kaohsiung Travel (Kaohsiung City Government Tourism Bureau)</a
+          >
+        </li>
+        <li>
+          <a
+            href={attraction.govtMainUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-2"
+            >Kaohsiung City Government</a
+          >
+        </li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

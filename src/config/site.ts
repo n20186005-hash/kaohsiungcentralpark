@@ -97,8 +97,8 @@ export const attraction = {
    */
   rating: 4.5,
   ratingOutOf: 5,
-  reviewCount: 16409,
-  reviewCountLabel: '16,409 則評價',
+  reviewCount: 16428,
+  reviewCountLabel: '16,428 則評價',
   reviewSyncLabel: '2026 年 9 月',
   reviewSourceLabel: 'Google 地圖（Google Maps）使用者評價',
   reviewSyncLine: '評分與評價數同步自谷歌地圖（Google Maps）使用者評價 · 2026 年 9 月',

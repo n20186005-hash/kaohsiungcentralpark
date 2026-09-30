@@ -1,20 +1,27 @@
 ---
 import { attraction, siteConfig } from '../config/site';
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'zh' } = Astro.props;
 
 const nav = [
-  { href: '#about', label: '景點介紹' },
-  { href: '#weather', label: '天氣預報' },
-  { href: '#seasons', label: '季節策略' },
-  { href: '#highlights', label: '園區亮點' },
-  { href: '#services', label: '設施服務' },
-  { href: '#routes', label: '推薦路線' },
-  { href: '#location', label: '位置地圖' },
-  { href: '#transport', label: '交通攻略' },
-  { href: '#nearby', label: '周邊景點' },
-  { href: '#history', label: '歷史沿革' },
-  { href: '#science', label: '生態科普' },
-  { href: '#reviews', label: '評分評價' },
-  { href: '#faq', label: '常見問答' },
+  { href: '#about', key: 'navIntro' as const },
+  { href: '#weather', key: 'navWeather' as const },
+  { href: '#seasons', key: 'navSeasons' as const },
+  { href: '#highlights', key: 'navHighlights' as const },
+  { href: '#services', key: 'navServices' as const },
+  { href: '#routes', key: 'navRoutes' as const },
+  { href: '#location', key: 'navLocation' as const },
+  { href: '#transport', key: 'navTransport' as const },
+  { href: '#nearby', key: 'navNearby' as const },
+  { href: '#history', key: 'navHistory' as const },
+  { href: '#science', key: 'navScience' as const },
+  { href: '#reviews', key: 'navReviews' as const },
+  { href: '#faq', key: 'navFaq' as const },
 ];
 ---
 
@@ -22,7 +29,7 @@ const nav = [
   class="sticky top-0 z-40 border-b border-stone-200/80 bg-stone-50/85 backdrop-blur supports-[backdrop-filter]:bg-stone-50/70"
 >
   <div class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
-    <a href="/" class="flex shrink-0 items-center gap-2">
+    <a href={locale === 'en' ? '/en/' : '/'} class="flex shrink-0 items-center gap-2">
       <span
         aria-hidden="true"
         class="grid h-9 w-9 place-items-center rounded-xl bg-emerald-700 text-sm font-bold text-white"
@@ -34,14 +41,14 @@ const nav = [
       </span>
     </a>
 
-    <nav aria-label="頁面導覽" class="ml-auto hidden items-center gap-0.5 lg:flex">
+    <nav aria-label={t(locale, 'pageNav')} class="ml-auto hidden items-center gap-0.5 lg:flex">
       {
         nav.map(item => (
           <a
             href={item.href}
             class="whitespace-nowrap rounded-full px-2.5 py-2 text-[13px] font-medium text-stone-600 transition hover:bg-emerald-50 hover:text-emerald-800"
           >
-            {item.label}
+            {t(locale, item.key)}
           </a>
         ))
       }
@@ -53,12 +60,12 @@ const nav = [
       rel="noopener noreferrer"
       class="ml-auto shrink-0 rounded-full bg-emerald-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 lg:ml-0"
     >
-      查看地圖 ↗
+      {t(locale, 'viewMap')}
     </a>
   </div>
 
   <nav
-    aria-label="快速錨點"
+    aria-label={t(locale, 'quickAnchors')}
     class="flex gap-1 overflow-x-auto border-t border-stone-200/70 px-4 py-2 lg:hidden"
   >
     {
@@ -67,7 +74,7 @@ const nav = [
           href={item.href}
           class="whitespace-nowrap rounded-full bg-white px-3 py-1.5 text-xs font-medium text-stone-600 shadow-sm ring-1 ring-stone-200"
         >
-          {item.label}
+          {t(locale, item.key)}
         </a>
       ))
     }

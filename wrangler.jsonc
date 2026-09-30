@@ -3,11 +3,10 @@
   "name": "kaohsiung-central-park",
   "compatibility_date": "2025-09-01",
   "compatibility_flags": ["nodejs_compat"],
-  // @astrojs/cloudflare 14 會把 SSR worker 輸出到 dist/server，靜態資源
-  // （sitemap、圖片、PWA 圖示與 Service Worker）輸出到 dist/client。
-  // main 指向套件提供的 worker 進入點（啟動後再由它載入 dist 產物），
-  // 因此無論 dist 是否存在都能完成建置，也不會破壞 wrangler deploy。
-  "main": "@astrojs/cloudflare/entrypoints/server",
+  // 自訂 Worker 進入點：先做 www.→apex 與 http→https 的 301 規範化重導向，
+  // 再委派給 Astro + @astrojs/cloudflare 的 SSR handler（dist/server/entry.mjs）。
+  // 注意：dist/server/entry.mjs 由 `astro build` 產生，必須先建置再 wrangler deploy。
+  "main": "./src/worker.ts",
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist/client"

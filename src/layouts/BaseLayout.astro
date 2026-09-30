@@ -11,6 +11,7 @@ import {
   ogImageUrl,
   siteConfig,
 } from '../config/site';
+import { canonicalFor, hreflangAlternates, htmlLang, meta, type Locale } from '../i18n';
 
 interface Props {
   title?: string;
@@ -19,7 +20,8 @@ interface Props {
   ogDescription?: string;
   /** 是否輸出 FAQPage 結構化資料（僅首頁） */
   includeFaq?: boolean;
-  canonicalPath?: string;
+  /** 語言版本：zh（/）或 en（/en/），用於 canonical / hreflang / <html lang> / JSON-LD */
+  locale?: Locale;
 }
 
 const {
@@ -28,22 +30,18 @@ const {
   ogTitle,
   ogDescription,
   includeFaq = false,
-  canonicalPath = '/',
+  locale = 'zh',
 } = Astro.props;
 
-const canonical = new URL(canonicalPath, siteConfig.baseUrl).href;
-const pageTitle =
-  title ??
-  `${attraction.displayName}（${attraction.city}）— 高雄前金區都市森林・地圖與交通指南`;
-const pageDescription =
-  description ??
-  `${attraction.displayName}（${attraction.fullNameEn}）位於${attraction.country}${attraction.city}${attraction.locality}，佔地${attraction.area}，24 小時免費開放。本站提供位置地圖、捷運公車交通、園區亮點、周邊景點與來自 Google 地圖使用者的最新評分。`;
-const pageOgTitle =
-  ogTitle ?? `${attraction.displayName} — ${attraction.city}參觀指南`;
-const pageOgDescription =
-  ogDescription ??
-  `高雄${attraction.shortName}Visitor Guide：位置地址、開放時間、交通路線、${attraction.area}園區亮點與 Google 地圖使用者評價同步資料。`;
+const canonical = canonicalFor(locale);
+const pageMeta = meta[locale];
+const pageTitle = title ?? pageMeta.title;
+const pageDescription = description ?? pageMeta.description;
+const pageOgTitle = ogTitle ?? pageMeta.ogTitle;
+const pageOgDescription = ogDescription ?? pageMeta.ogDescription;
 const ogImageShareAlt = `${ogImageAlt}：${attraction.city}${attraction.locality}的都市森林公園`;
+const pageKeywords = pageMeta.keywords;
+const htmlLangTag = htmlLang(locale);
 
 const attractionId = `${siteConfig.baseUrl}/#attraction`;
 
@@ -63,7 +61,7 @@ const attractionLd = {
     `Kaohsiung Central Park Cianjin`,
   ],
   description: attraction.description,
-  url: `${siteConfig.baseUrl}/`,
+  url: canonical,
   image: [heroImageUrl, ogImageUrl, ...galleryImageUrls],
   isAccessibleForFree: true,
   publicAccess: true,
@@ -108,8 +106,8 @@ const websiteLd = {
   '@id': `${siteConfig.baseUrl}/#website`,
   name: siteConfig.name,
   alternateName: siteConfig.brandDomain,
-  url: `${siteConfig.baseUrl}/`,
-  inLanguage: siteConfig.lang,
+  url: canonical,
+  inLanguage: htmlLangTag,
   publisher: { '@id': attractionId },
   about: { '@id': attractionId },
 };
@@ -129,19 +127,19 @@ const breadcrumbLd = {
       '@type': 'ListItem',
       position: 2,
       name: `${attraction.city}${attraction.locality}`,
-      item: `${siteConfig.baseUrl}/#location`,
+      item: `${canonical}#location`,
     },
     {
       '@type': 'ListItem',
       position: 3,
       name: attraction.state,
-      item: `${siteConfig.baseUrl}/#location`,
+      item: `${canonical}#location`,
     },
     {
       '@type': 'ListItem',
       position: 4,
       name: `${attraction.country} ${attraction.countryEn}`,
-      item: `${siteConfig.baseUrl}/#location`,
+      item: `${canonical}#location`,
     },
   ],
 };
@@ -152,17 +150,17 @@ const faqLd = {
   '@id': `${canonical}#faq`,
   mainEntity: faqItems.map(item => ({
     '@type': 'Question',
-    name: item.question,
+    name: item.question[locale],
     acceptedAnswer: {
       '@type': 'Answer',
-      text: item.answer,
+      text: item.answer[locale],
     },
   })),
 };
 ---
 
 <!doctype html>
-<html lang={siteConfig.lang}>
+<html lang={htmlLangTag}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -170,16 +168,20 @@ const faqLd = {
     <!-- TDK -->
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
-    <meta
-      name="keywords"
-      content={`${attraction.fullName},${attraction.fullNameEn},高雄${attraction.shortName},中央公園捷運站,高雄景點,高雄前金區,${attraction.cityEn} ${attraction.shortNameEn}`}
-    />
+    <meta name="keywords" content={pageKeywords} />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <meta name="author" content={siteConfig.name} />
 
     <!-- Canonical -->
     <link rel="canonical" href={canonical} />
     <link rel="home" href={`${siteConfig.baseUrl}/`} />
+
+    <!-- Hreflang（雙語互指，x-default 指向英文版以接住 "central park kaohsiung" 等國際查詢） -->
+    {
+      hreflangAlternates().map(alt => (
+        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+      ))
+    }
 
     <!-- Open Graph -->
     <meta property="og:site_name" content={siteConfig.name} />
@@ -244,11 +246,11 @@ const faqLd = {
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-emerald-700 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
       >跳至主要內容</a
     >
-    <Header />
+    <Header locale={locale} />
     <main id="main">
       <slot />
     </main>
-    <Footer />
+    <Footer locale={locale} />
 
     <script is:inline>
       // PWA：註冊 Service Worker 以提供離線瀏覽（失敗不影響頁面功能）

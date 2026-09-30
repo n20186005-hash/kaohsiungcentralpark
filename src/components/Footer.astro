@@ -1,16 +1,41 @@
 ---
 import { attraction, siteConfig } from '../config/site';
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'zh' } = Astro.props;
 
 const year = new Date().getFullYear();
 const anchors = [
-  { href: '#about', label: '景點介紹' },
-  { href: '#location', label: '位置交通' },
-  { href: '#nearby', label: '周邊景點' },
-  { href: '#history', label: '歷史沿革' },
-  { href: '#reviews', label: '評分評價' },
-  { href: '#faq', label: '常見問答' },
-  { href: '#sources', label: '資料來源' },
+  { href: '#about', key: 'footerIntro' as const },
+  { href: '#location', key: 'footerLocation' as const },
+  { href: '#nearby', key: 'footerNearby' as const },
+  { href: '#history', key: 'footerHistory' as const },
+  { href: '#reviews', key: 'footerReviews' as const },
+  { href: '#faq', key: 'footerFaq' as const },
+  { href: '#sources', key: 'footerSources' as const },
 ];
+
+const introText =
+  locale === 'en'
+    ? `${siteConfig.brandDomain} is an independent visitor guide to ${attraction.fullNameEn} (${attraction.cityEn}), gathering location maps, transport routes, park highlights and official tourism links for trip planning.`
+    : `${siteConfig.brandDomain} 是${attraction.fullName}（${attraction.fullNameEn}，${attraction.cityEn}）的獨立參觀指南，整理位置地圖、交通路線、園區亮點與官方旅遊資訊連結，供旅客行前參考。`;
+
+const govtTourismLabel = locale === 'en' ? 'Kaohsiung Travel' : attraction.govtTourismLabel;
+const govtMainLabel = locale === 'en' ? 'Kaohsiung City Government' : attraction.govtMainLabel;
+
+const disclaimer =
+  locale === 'en'
+    ? `The Google Maps rating and review count shown on this site are quoted from Google Maps user reviews (synced September 2026); copyright belongs to the original authors and Google Maps. Always refer to the `
+    : `本站標示之 Google 地圖評分與評價數引用自 Google 地圖使用者評價（同步時間 2026 年 9 月），版權歸原作者與 Google 地圖所有；請以 `;
+
+const copyright =
+  locale === 'en'
+    ? `© ${year} ${siteConfig.name} · ${siteConfig.brandDomain} · Unofficial visitor guide, not affiliated with Google LLC.`
+    : `© ${year} ${siteConfig.name} · ${siteConfig.brandDomain} · 非官方旅遊指南，與 Google LLC 無隸屬關係。`;
 ---
 
 <footer class="mt-20 border-t border-stone-200 bg-stone-900 text-stone-300">
@@ -25,23 +50,23 @@ const anchors = [
           >
           <span class="text-base font-bold text-white">{attraction.displayName}</span>
         </p>
-        <p class="mt-4 max-w-md text-sm leading-relaxed text-stone-400">
-          {siteConfig.brandDomain} 是{attraction.fullName}（{attraction.fullNameEn}，{attraction.cityEn}）的獨立參觀指南，整理位置地圖、交通路線、園區亮點與官方旅遊資訊連結，供旅客行前參考。
-        </p>
+        <p class="mt-4 max-w-md text-sm leading-relaxed text-stone-400">{introText}</p>
         <p class="mt-4 text-xs leading-relaxed text-stone-500">
           {attraction.fullName} → {attraction.city}{attraction.locality} → {attraction.state} →
           {attraction.country} → {attraction.countryEn}
         </p>
       </div>
 
-      <nav aria-label="頁尾導覽">
-        <p class="text-xs font-semibold uppercase tracking-wide text-stone-500">本頁內容</p>
+      <nav aria-label={t(locale, 'onThisPage')}>
+        <p class="text-xs font-semibold uppercase tracking-wide text-stone-500">
+          {t(locale, 'onThisPage')}
+        </p>
         <ul class="mt-4 space-y-2 text-sm">
           {
             anchors.map(item => (
               <li>
                 <a href={item.href} class="transition hover:text-emerald-300">
-                  {item.label}
+                  {t(locale, item.key)}
                 </a>
               </li>
             ))
@@ -50,14 +75,16 @@ const anchors = [
       </nav>
 
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wide text-stone-500">外部連結</p>
+        <p class="text-xs font-semibold uppercase tracking-wide text-stone-500">
+          {t(locale, 'externalLinks')}
+        </p>
         <ul class="mt-4 space-y-2 text-sm">
           <li>
             <a
               href={attraction.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="transition hover:text-emerald-300">Google 地圖：查看全部評價 ↗</a
+              class="transition hover:text-emerald-300">{t(locale, 'googleReviews')}</a
             >
           </li>
           <li>
@@ -65,7 +92,7 @@ const anchors = [
               href={attraction.govtTourismUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="transition hover:text-emerald-300">{attraction.govtTourismLabel} ↗</a
+              class="transition hover:text-emerald-300">{govtTourismLabel} ↗</a
             >
           </li>
           <li>
@@ -73,7 +100,7 @@ const anchors = [
               href={attraction.govtMainUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="transition hover:text-emerald-300">{attraction.govtMainLabel} ↗</a
+              class="transition hover:text-emerald-300">{govtMainLabel} ↗</a
             >
           </li>
         </ul>
@@ -81,17 +108,13 @@ const anchors = [
     </div>
 
     <p class="mt-10 border-t border-stone-800 pt-6 text-xs leading-relaxed text-stone-500">
-      本站標示之 Google 地圖評分與評價數引用自 Google 地圖使用者評價（同步時間 2026 年 9 月），版權歸原作者與
-      Google 地圖所有；請以 <a
+      {disclaimer}<a
         href={attraction.mapsUrl}
         target="_blank"
         rel="noopener noreferrer"
-        class="underline decoration-stone-600 underline-offset-2">Google 地圖原始頁面</a
-      > 的最新資料為準。
+        class="underline decoration-stone-600 underline-offset-2">Google Maps</a
+      >{locale === 'en' ? ' original page for the latest data.' : ' 的最新資料為準。'}
     </p>
-    <p class="mt-3 text-xs text-stone-600">
-      © {year} {siteConfig.name} · {siteConfig.brandDomain} · 非官方旅遊指南，與 Google LLC
-      無隸屬關係。
-    </p>
+    <p class="mt-3 text-xs text-stone-600">{copyright}</p>
   </div>
 </footer>
