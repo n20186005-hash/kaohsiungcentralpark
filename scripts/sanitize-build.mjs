@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 // 直接使用 URL.pathname 在 Windows 會變成 /H:/... 這種無效路徑，必須轉成本地路徑。
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
 const replacements = [
+  [fileURLToPath(new URL('../', import.meta.url)), '/site/'],
   ['example.com', 'invalid.invalid'],
   ['localhost', '127.0.0.1'],
 ];

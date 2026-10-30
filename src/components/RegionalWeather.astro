@@ -1,0 +1,22 @@
+---
+import type {Locale} from '../i18n';interface Props{locale:Locale;}const {locale}=Astro.props;
+const C=locale==='en'?{title:'Fresh regional weather',note:'Model near the park, not an on-site weather station, closure notice or safety clearance.',loading:'Requesting a fresh forecast…',error:'A fresh valid forecast is unavailable; old or substitute numbers are not displayed.',temp:'Temperature',wind:'Wind',rain:'Daily maximum rain probability',uv:'Daily maximum UV',model:'Model time',retrieved:'Retrieved',condition:'Model weather code',thunder:'Thunder model signal: check official warnings and local conditions.',heavyRain:'Heavy-rain model signal: check official warnings and local routes.',fog:'Fog model signal: check visibility and road conditions.',limits:'Refreshes every 15 minutes while active. Failure clears numbers; no climate average is substituted. Weather codes describe model conditions, not access permission.'}:{title:'近期區域天氣預報',note:'公園附近的模型預報，非園內氣象站實測、封閉公告或安全許可。',loading:'正在請求近期預報…',error:'目前沒有足夠新且有效的預報，不顯示舊值或替代數據。',temp:'氣溫',wind:'風速',rain:'當日最高降雨機率',uv:'當日最高紫外線指數',model:'模型時間',retrieved:'取得時間',condition:'模型天氣代碼',thunder:'模型有雷暴訊號，請查官方警特報及當地狀況。',heavyRain:'模型有強降雨訊號，請查官方警特報及現場路徑。',fog:'模型有霧訊號，請查道路能見度及交通狀況。',limits:'頁面活躍時每15分鐘更新；失敗清除數值，不以氣候平均替代。天氣代碼是模型天氣狀態，不是通行許可。'};
+---
+<section id="weather"><h2>{C.title}</h2><p>{C.note}</p><div id="weather-root" data-lat="22.624943" data-lon="120.299250" data-locale={locale==='en'?'en':'zh-TW'} aria-live="polite">{C.loading}</div><script type="application/json" is:inline id="weather-copy" set:html={JSON.stringify({copy:C})}/><p>{C.limits}</p><p><a href="https://open-meteo.com/">Open-Meteo</a> · <a href="https://open-meteo.com/en/docs">WMO code reference</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href="https://www.cwa.gov.tw/">中央氣象署 / Official warnings</a></p></section>
+<script>
+import {parseForecast,modelSignal} from '../lib/weather-model';
+const root=document.getElementById('weather-root');const data=document.getElementById('weather-copy');
+if(root&&data){
+ const {copy:C}=JSON.parse(data.textContent||'{}');const locale=root.dataset.locale||'en';let last=0;let loading=false;
+ const make=(tag:string,text:string,cls='')=>{const element=document.createElement(tag);element.textContent=text;element.className=cls;return element;};
+ const clear=()=>{root.replaceChildren(make('p',C.error,'weather-card'));last=0;};
+ const load=async()=>{if(loading)return;loading=true;try{
+  const url=new URL('https://api.open-meteo.com/v1/forecast');url.search=new URLSearchParams({latitude:root.dataset.lat||'',longitude:root.dataset.lon||'',current:'temperature_2m,weather_code,wind_speed_10m',daily:'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max',timezone:'Asia/Taipei',forecast_days:'7'}).toString();
+  const response=await fetch(url,{signal:AbortSignal.timeout(8000)});if(!response.ok)throw Error('status');const report=parseForecast(await response.json());if(!report)throw Error('invalid');
+  const now=report.current,today=report.days[0];const card=make('div','','weather-card');card.append(make('h3',`${C.temp}: ${Math.round(now.temperature)}°C`,'text-2xl font-bold'),make('p',`${C.condition}: WMO ${now.code}`),make('p',`${C.wind}: ${Math.round(now.wind)} km/h`),make('p',`${C.rain}: ${today.probability}%`));if(today.uv!==null)card.append(make('p',`${C.uv}: ${today.uv}`));const signal=modelSignal(now.code);if(signal)card.append(make('p',C[signal],'mt-4 font-bold text-red-800'));
+  card.append(make('p',`${C.model}: ${report.modelTime} · Asia/Taipei`,'mt-4 text-sm'),make('p',`${C.retrieved}: ${new Date(report.retrievedAt).toLocaleString(locale,{timeZone:'Asia/Taipei'})}`,'text-sm'));
+  const grid=make('div','','weather-grid');for(const day of report.days){const item=make('div','','weather-card');item.append(make('h3',day.date,'font-bold'),make('p',`${C.condition}: WMO ${day.code}`),make('p',`${Math.round(day.min)}° / ${Math.round(day.max)}°C`),make('p',`${C.rain}: ${day.probability}%`));grid.append(item);}root.replaceChildren(card,grid);last=Date.now();
+ }catch{clear();}finally{loading=false;}};
+ load();setInterval(()=>{if(document.visibilityState==='visible')load();else if(last&&Date.now()-last>30*60000)clear();},15*60000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='visible')return;if(last&&Date.now()-last>30*60000)clear();if(!last||Date.now()-last>15*60000)load();});
+}
+</script>

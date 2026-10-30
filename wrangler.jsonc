@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "kaohsiung-central-park",
+  "name": "kaohsiungcentralpark",
   "compatibility_date": "2025-09-01",
   "compatibility_flags": ["nodejs_compat"],
   // 自訂 Worker 進入點：先做 www.→apex 與 http→https 的 301 規範化重導向，
@@ -9,7 +9,8 @@
   "main": "./src/worker.ts",
   "assets": {
     "binding": "ASSETS",
-    "directory": "./dist/client"
+    "directory": "./dist/client",
+    "run_worker_first": true
   },
   "observability": {
     "enabled": true

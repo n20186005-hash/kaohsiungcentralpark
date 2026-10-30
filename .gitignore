@@ -129,3 +129,5 @@ worker-configuration.d.ts
 
 # 來源對應檔，部署到 Workers 時用不到
 **/*.js.map
+
+.wrangler.jsonc.build-disabled

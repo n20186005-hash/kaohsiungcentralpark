@@ -10,11 +10,11 @@
     "pnpm": "10.4.1"
   },
   "scripts": {
-    "dev": "astro dev --host 0.0.0.0",
-    "build": "ASTRO_ADAPTER=cloudflare astro build && node scripts/sanitize-build.mjs",
+    "dev": "node scripts/run-astro.mjs dev --host 0.0.0.0",
+    "build": "node scripts/run-astro.mjs build && node scripts/sanitize-build.mjs",
     "build:static": "astro build",
     "preview": "astro preview --host 0.0.0.0",
-    "check": "astro check",
+    "check": "node scripts/run-astro.mjs check",
     "format": "prettier --write ."
   },
   "dependencies": {

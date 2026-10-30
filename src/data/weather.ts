@@ -112,11 +112,11 @@ function stringAt(list: (number | string)[] | undefined, index: number): string 
 }
 
 function readCache(): CacheEntry | undefined {
-  return (globalThis as Record<string, CacheEntry | undefined>)[CACHE_KEY];
+  return (globalThis as unknown as Record<string, CacheEntry | undefined>)[CACHE_KEY];
 }
 
 function writeCache(entry: CacheEntry) {
-  (globalThis as Record<string, CacheEntry | undefined>)[CACHE_KEY] = entry;
+  (globalThis as unknown as Record<string, CacheEntry | undefined>)[CACHE_KEY] = entry;
 }
 
 function buildRequestUrl(lat: number, lng: number) {
