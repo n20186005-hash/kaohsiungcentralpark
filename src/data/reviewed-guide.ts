@@ -5,7 +5,7 @@ export const reviewed = {
     "name": "高雄中央公園",
     "subtitle": "Kaohsiung Central Park · 高雄市中心都市公園",
     "intro": "高雄旅遊網介紹中央公園面積約 12.7 公頃，設有人造湖、花園迷宮及水舞廣場。公園、捷運站與南側城市光廊是相關但不同的地點；本站協助區分位置、交通與現場開放資訊。",
-    "photo": "本站原創公園概念插畫，非現場照片、測量地圖或目前設施配置。",
+    "photo": "高雄中央公園歷史實景照片，不能代表所有設施目前開放狀況。",
     "map": "開啟 Google 地圖參考點",
     "language": "English",
     "sections": [
@@ -106,7 +106,7 @@ export const reviewed = {
       ],
       [
         "這些是現場照片嗎？",
-        "目前使用本站原創概念插畫，非照片或精確地圖。原照片缺少逐檔可核對的來源與完整權利依據，已自目前公開資產移除；這不代表已取得其攝影或主體權利。"
+        "目前展示從舊版恢復的公園實景照片，拍攝日期不等於今日現況；開放狀況仍須核對官方公告。影像來源與說明請見本站影像資訊頁。"
       ]
     ]
   },
@@ -116,7 +116,7 @@ export const reviewed = {
     "name": "Kaohsiung Central Park",
     "subtitle": "高雄中央公園 · An urban park in central Kaohsiung",
     "intro": "Kaohsiung Travel describes a park of about 12.7 hectares with an artificial lake, garden maze and water square. The park, MRT station and Urban Spotlight Arcade are related places with separate access arrangements. This guide distinguishes location references from current operating information.",
-    "photo": "Original conceptual park illustration, not a photograph, surveyed map or current facility plan.",
+    "photo": "Archived photograph of Kaohsiung Central Park; current facilities may differ.",
     "map": "Open the Google Maps reference point",
     "language": "繁體中文",
     "sections": [
@@ -217,7 +217,7 @@ export const reviewed = {
       ],
       [
         "Are the pictures current photographs?",
-        "The current visual is an original conceptual illustration, not a photograph or exact map. Earlier photos lacked individually verifiable provenance and complete rights evidence and have been removed from current public assets. Their removal does not establish photographic or subject-rights clearance."
+        "The page now shows restored park photographs from an earlier site version. They are not a live view or proof of today's facility access. See the image information page for context."
       ]
     ]
   }

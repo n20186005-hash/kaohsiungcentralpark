@@ -4,10 +4,41 @@ import RegionalWeather from './RegionalWeather.astro';
 import type {Locale} from '../i18n';
 interface Props{locale:Locale;}
 const {locale}=Astro.props;const c=reviewed[locale];
+const en = locale === 'en';
+const photos = [
+  { src: '/images/lake-01.jpg', zh: '中央公園湖景', en: 'Central Park lake', group: 'highlights' },
+  { src: '/images/park-lawn.jpg', zh: '公園草坪', en: 'Park lawn', group: 'highlights' },
+  { src: '/images/park-greenery.jpg', zh: '綠蔭景觀', en: 'Park greenery', group: 'highlights' },
+  { src: '/images/park-hill.jpg', zh: '園區地景', en: 'Park landscape', group: 'highlights' },
+  { src: '/images/playground.jpg', zh: '遊憩空間', en: 'Recreation area', group: 'highlights' },
+  { src: '/images/pond-reflection.jpg', zh: '水景倒影', en: 'Pond reflections', group: 'highlights' },
+  { src: '/images/station-exterior.jpg', zh: '中央公園捷運站外觀', en: 'MRT station exterior', group: 'transport' },
+  { src: '/images/station-entrance.jpg', zh: '捷運站入口', en: 'MRT entrance', group: 'transport' },
+  { src: '/images/station-garden.jpg', zh: '捷運站周邊綠地', en: 'Station greenery', group: 'transport' },
+  { src: '/images/station-r9.jpg', zh: '捷運 R9 中央公園站', en: 'MRT R9 Central Park', group: 'transport' },
+  { src: '/images/park-aerial.jpg', zh: '園區俯瞰', en: 'Aerial park view', group: 'nearby' },
+  { src: '/images/park-marker.jpg', zh: '公園景觀標誌', en: 'Park landmark', group: 'nearby' },
+  { src: '/images/lake-02.jpg', zh: '湖畔景色', en: 'Lakeside scenery', group: 'nearby' },
+] as const;
 ---
-<section class="guide-hero"><div class="guide-wrap"><p class="eyebrow">{c.subtitle}</p><h1>{c.name}</h1><p class="intro">{c.intro}</p><p><a class="button" href="#location">{locale==='en'?'Location & transport':'位置與交通'}</a> <a class="button secondary" href="#hours">{locale==='en'?'Hours & access checks':'開放資訊核對'}</a></p><figure><img src="/images/park-guide.svg" width="1200" height="630" alt={c.photo} fetchpriority="high"/><figcaption>{c.photo} <a href="/photo-credits/">{locale==='en'?'Image information':'影像說明'}</a></figcaption></figure></div></section>
+<section class="guide-hero">
+  <img class="hero-photo" src="/images/hero-park.jpg" width="1280" height="853" alt={en?'Kaohsiung Central Park photograph':'高雄中央公園實景照片'} fetchpriority="high"/>
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="guide-wrap hero-content">
+    <p class="eyebrow">{c.subtitle}</p><h1>{c.name}</h1><p class="intro">{c.intro}</p>
+    <div class="hero-actions"><a class="button" href="#location">{en?'Location & transport':'位置與交通'}</a><a class="button secondary" href="#hours">{en?'Hours & access checks':'開放資訊核對'}</a></div>
+    <p class="hero-credit">{en?'Archive photograph · Check current conditions':'歷史實景照片 · 現場狀況請以最新公告為準'} · <a href="/photo-credits/">{en?'Image information':'影像說明'}</a></p>
+  </div>
+</section>
 <div class="guide-wrap guide-body">
-{c.sections.map(([id,title,paragraphs])=><section id={id}><h2>{title}</h2>{paragraphs.map(p=><p>{p}</p>)}{id==='location'&&<p><a class="button" href="https://maps.app.goo.gl/eC8hTJNhAbFwetQUA" target="_blank" rel="noopener noreferrer">{c.map} ↗</a></p>}{id==='transport'&&<p><a href="https://www.krtc.com.tw/Guide/station_info?n=R9" target="_blank" rel="noopener noreferrer">{locale==='en'?'Kaohsiung MRT: R9 station information':'高雄捷運：R9 車站資訊'} ↗</a> · <a href="https://www.tbkc.gov.tw/" target="_blank" rel="noopener noreferrer">{locale==='en'?'City transport services':'高雄市交通局'} ↗</a></p>}{id==='hours'&&<p><a href="https://khh.travel/zh-tw/event/" target="_blank" rel="noopener noreferrer">{locale==='en'?'City tourism events and announcements':'高雄旅遊網活動與消息'} ↗</a></p>}</section>)}
+<nav class="section-shortcuts" aria-label={en?'Guide sections':'景點導覽'}><a href="#highlights">{en?'Highlights':'園區亮點'}</a><a href="#transport">{en?'MRT & transport':'捷運交通'}</a><a href="#hours">{en?'Hours & access':'開放資訊'}</a><a href="#nearby">{en?'Nearby':'周邊場域'}</a><a href="#faq">{en?'FAQ':'常見問答'}</a></nav>
+{c.sections.map(([id,title,paragraphs],i)=><section id={id} class:list={['guide-section',{ 'section-tint': i%2===1 }]}>
+  <div class="section-copy"><span class="section-index">{String(i+1).padStart(2,'0')} / {en?'VISITOR GUIDE':'景點指南'}</span><h2>{title}</h2>{paragraphs.map(p=><p>{p}</p>)}
+  {id==='location'&&<p><a class="button" href="https://maps.app.goo.gl/eC8hTJNhAbFwetQUA" target="_blank" rel="noopener noreferrer">{c.map} ↗</a></p>}
+  {id==='transport'&&<p><a href="https://www.krtc.com.tw/Guide/station_info?n=R9" target="_blank" rel="noopener noreferrer">{en?'Kaohsiung MRT: R9 station information':'高雄捷運：R9 車站資訊'} ↗</a> · <a href="https://www.tbkc.gov.tw/" target="_blank" rel="noopener noreferrer">{en?'City transport services':'高雄市交通局'} ↗</a></p>}
+  {id==='hours'&&<p><a href="https://khh.travel/zh-tw/event/" target="_blank" rel="noopener noreferrer">{en?'City tourism events and announcements':'高雄旅遊網活動與消息'} ↗</a></p>}</div>
+  {photos.some(photo=>photo.group===id)&&<div class="photo-grid">{photos.filter(photo=>photo.group===id).map((photo,index)=><figure class:list={['photo-card',{'photo-featured':index===0}]}><img src={photo.src} alt={en?photo.en:photo.zh} loading="lazy" decoding="async" width="1280" height="960"/><figcaption>{en?photo.en:photo.zh}</figcaption></figure>)}</div>}
+</section>)}
 <RegionalWeather locale={locale}/>
 <section id="faq"><h2>{locale==='en'?'Frequently asked questions':'常見問答'}</h2>{c.faq.map(([q,a])=><details class="faq"><summary>{q}</summary><p>{a}</p></details>)}</section>
 <section id="sources"><h2>{locale==='en'?'Sources and review limits':'資料來源與核對範圍'}</h2><p>{locale==='en'?'Sources reviewed 2026-10-29 (Los Angeles). Page update dates are source metadata, not a fresh inspection of operations. Current admission, water-show schedules, parking rates and all-route accessibility remain unverified.':'資料查閱日2026-10-29（洛杉磯日期）。來源頁更新日不等於重新實勘營運狀況；現行統一票價、水舞場次、停車費及全程無障礙仍未核實。'}</p><ul><li><a href="https://khh.travel/zh-tw/attractions/detail/336/">{locale==='en'?'City park introduction (updated 2023-11-29): area, listed access, landscape and neighbouring places':'市府中央公園介紹（更新2023-11-29）：面積、開放列示、景觀與周邊位置'}</a></li><li><a href="https://khh.travel/zh-tw/attractions/detail/93/">{locale==='en'?'City MRT attraction page (updated 2022-06-14): station address and architecture background':'市府捷運站旅遊頁（更新2022-06-14）：站址與建築背景'}</a></li><li><a href="https://www.krtc.com.tw/Guide/station_info?n=R9">{locale==='en'?'Kaohsiung MRT operator: R9 station, plans and timetable links':'高雄捷運營運方：R9 車站、站圖與時刻表入口'}</a></li><li><a href="https://khh.travel/zh-tw/attractions/detail/271/">{locale==='en'?'City Urban Spotlight Arcade listing: separate attraction':'市府城市光廊頁：不同場域需另核對'}</a></li><li><a href="https://www.cwa.gov.tw/">{locale==='en'?'Central Weather Administration: official forecasts and warnings':'中央氣象署：官方預報及警特報'}</a></li><li><a href="https://maps.app.goo.gl/eC8hTJNhAbFwetQUA">{locale==='en'?'Google Maps: manual 2026-10-29 rating/address/accessibility snapshot':'Google 地圖：2026-10-29手工評分、地址及無障礙列示快照'}</a></li></ul></section>
