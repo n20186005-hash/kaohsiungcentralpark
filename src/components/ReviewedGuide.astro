@@ -31,7 +31,6 @@ const photos = [
   </div>
 </section>
 <div class="guide-wrap guide-body">
-<nav class="section-shortcuts" aria-label={en?'Guide sections':'景點導覽'}><a href="#highlights">{en?'Highlights':'園區亮點'}</a><a href="#transport">{en?'MRT & transport':'捷運交通'}</a><a href="#hours">{en?'Hours & access':'開放資訊'}</a><a href="#nearby">{en?'Nearby':'周邊場域'}</a><a href="#faq">{en?'FAQ':'常見問答'}</a></nav>
 {c.sections.map(([id,title,paragraphs],i)=><section id={id} class:list={['guide-section',{ 'section-tint': i%2===1 }]}>
   <div class="section-copy"><span class="section-index">{String(i+1).padStart(2,'0')} / {en?'VISITOR GUIDE':'景點指南'}</span><h2>{title}</h2>{paragraphs.map(p=><p>{p}</p>)}
   {id==='location'&&<p><a class="button" href="https://maps.app.goo.gl/eC8hTJNhAbFwetQUA" target="_blank" rel="noopener noreferrer">{c.map} ↗</a></p>}

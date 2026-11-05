@@ -4,4 +4,9 @@ interface Props{locale?:Locale;}const {locale='zh'}=Astro.props;
 const en=locale==='en',base=en?'/en/':'/';
 const nav=en?[['about','Place & coordinates'],['transport','MRT & transport'],['hours','Hours & access'],['highlights','Highlights'],['nearby','Nearby'],['weather','Weather'],['faq','FAQ'],['sources','Sources']]:[['about','位置座標'],['transport','捷運交通'],['hours','開放核對'],['highlights','園區亮點'],['nearby','周邊場域'],['weather','天氣'],['faq','問答'],['sources','來源']];
 ---
-<header class="guide-header"><div class="header-inner"><a class="brand" href={base}>{en?'Kaohsiung Central Park':'高雄中央公園'}<small>kaohsiungcentralpark.com</small></a><details class="menu"><summary>{en?'Menu':'目錄'} ▾</summary><nav aria-label={en?'Page navigation':'頁面導覽'}>{nav.map(([id,label])=><a href={base+'#'+id}>{label}</a>)}</nav></details><nav class="language-nav" aria-label={en?'Language':'語言'}><a href="/" lang="zh-Hant" aria-current={!en?'page':undefined}>中文</a><a href="/en/" lang="en" aria-current={en?'page':undefined}>English</a></nav></div></header>
+<header class="guide-header"><div class="header-inner">
+  <a class="brand" href={base}>{en?'Kaohsiung Central Park':'高雄中央公園'}<small>kaohsiungcentralpark.com</small></a>
+  <nav class="desktop-nav" aria-label={en?'Main navigation':'網站主導覽'}>{nav.map(([id,label])=><a href={base+'#'+id}>{label}</a>)}</nav>
+  <details class="menu"><summary>{en?'Menu':'目錄'} ▾</summary><nav aria-label={en?'Mobile navigation':'手機頁面導覽'}>{nav.map(([id,label])=><a href={base+'#'+id}>{label}</a>)}</nav></details>
+  <nav class="language-nav" aria-label={en?'Language':'語言'}><a href="/" lang="zh-Hant" aria-current={!en?'page':undefined}>中文</a><a href="/en/" lang="en" aria-current={en?'page':undefined}>English</a></nav>
+</div></header>
