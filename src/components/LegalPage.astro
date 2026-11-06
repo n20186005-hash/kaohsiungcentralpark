@@ -1,0 +1,185 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  legalContent,
+  legalLabels,
+  legalUi,
+  LEGAL_SLUGS,
+  type LegalSlug,
+} from '../data/legal';
+import type { Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  slug: LegalSlug;
+}
+
+const { locale, slug } = Astro.props;
+const en = locale === 'en';
+const base = en ? '/en/' : '/';
+const c = legalContent[slug][locale];
+const ui = legalUi[locale];
+const canonicalPath = `${base}${slug}/`;
+const origin = 'https://kaohsiungcentralpark.com';
+
+const related = LEGAL_SLUGS.filter(s => s !== slug).map(s => ({
+  href: `${base}${s}/`,
+  label: legalLabels[s][locale],
+}));
+const cookieControls = slug === 'cookie-settings';
+---
+
+<BaseLayout
+  locale={locale}
+  title={c.metaTitle}
+  description={c.description}
+  canonicalPath={canonicalPath}
+>
+  <link
+    slot="head"
+    rel="alternate"
+    hreflang="zh-Hant"
+    href={`${origin}/${slug}/`}
+  />
+  <link
+    slot="head"
+    rel="alternate"
+    hreflang="en"
+    href={`${origin}/en/${slug}/`}
+  />
+  <link
+    slot="head"
+    rel="alternate"
+    hreflang="x-default"
+    href={`${origin}/en/${slug}/`}
+  />
+
+  <section class="guide-wrap guide-body legal-page" aria-labelledby="legal-title">
+    <p class="legal-eyebrow">{en ? 'Site information' : '網站資訊'}</p>
+    <h1 id="legal-title">{c.h1}</h1>
+    <p class="legal-updated">{c.updated}</p>
+    <p class="legal-intro">{c.intro}</p>
+
+    <div class="legal-back-top">
+      <a href={base}>← {ui.homeLabel}</a>
+    </div>
+
+    {
+      c.sections.map(section => (
+        <section class="legal-section">
+          <h2>
+            {section.heading}
+            {section.status && <span class="legal-status">{section.status}</span>}
+          </h2>
+          {section.paragraphs.map(p => (
+            <p>{p}</p>
+          ))}
+          {section.toggle && (
+            <label class="legal-toggle">
+              <input
+                type="checkbox"
+                data-pref={section.toggle}
+                checked={section.toggle === 'necessary'}
+                disabled={section.toggle === 'necessary'}
+                aria-label={`${ui.optInLabel} — ${section.heading}`}
+              />
+              <span>
+                {section.toggle === 'necessary' ? ui.alwaysOn : ui.optInLabel}
+              </span>
+            </label>
+          )}
+        </section>
+      ))
+    }
+
+    {
+      cookieControls && (
+        <div
+          class="legal-controls"
+          data-cookie-controls
+          data-saved={ui.saved}
+          data-cleared={ui.cleared}
+          data-failed={ui.failed}
+        >
+          <div class="legal-controls-actions">
+            <button type="button" data-cookie-save class="button">{ui.save}</button>
+            <button type="button" data-cookie-reset class="button secondary">{ui.reset}</button>
+          </div>
+          <p class="legal-controls-status" role="status" aria-live="polite" data-cookie-status></p>
+          <p class="legal-disclosure">{ui.disclosure}</p>
+        </div>
+      )
+    }
+
+    <p class="legal-footnote">{c.footnote}</p>
+
+    <nav class="legal-related" aria-label={ui.relatedLabel}>
+      <h2>{ui.relatedLabel}</h2>
+      <ul>
+        {related.map(r => (
+          <li><a href={r.href}>{r.label}</a></li>
+        ))}
+        <li><a href="/photo-credits/">{ui.creditsLabel}</a></li>
+        <li><a href={base}>{ui.backLabel}</a></li>
+      </ul>
+    </nav>
+  </section>
+
+  {cookieControls && (
+    <script is:inline>
+      (function () {
+        var box = document.querySelector('[data-cookie-controls]');
+        if (!box) return;
+        var key = 'kcp-cookie-preferences';
+        var status = box.querySelector('[data-cookie-status]');
+        var inputs = box.closest('.legal-page')
+          ? box.closest('.legal-page').querySelectorAll('input[data-pref]')
+          : [];
+
+        function read() {
+          try {
+            var raw = localStorage.getItem(key);
+            return raw ? JSON.parse(raw) : null;
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function apply(saved) {
+          for (var i = 0; i < inputs.length; i++) {
+            var el = inputs[i];
+            if (el.disabled) continue;
+            el.checked = !!(saved && saved[el.getAttribute('data-pref')]);
+          }
+        }
+
+        apply(read());
+
+        var save = box.querySelector('[data-cookie-save]');
+        var reset = box.querySelector('[data-cookie-reset]');
+        if (save) {
+          save.addEventListener('click', function () {
+            var pref = {};
+            for (var i = 0; i < inputs.length; i++) {
+              var el = inputs[i];
+              if (!el.disabled) pref[el.getAttribute('data-pref')] = !!el.checked;
+            }
+            try {
+              localStorage.setItem(key, JSON.stringify(pref));
+              if (status) status.textContent = box.getAttribute('data-saved') || '';
+            } catch (e) {
+              if (status) status.textContent = box.getAttribute('data-failed') || '';
+            }
+          });
+        }
+        if (reset) {
+          reset.addEventListener('click', function () {
+            try { localStorage.removeItem(key); } catch (e) {}
+            apply(null);
+            if (status) status.textContent = box.getAttribute('data-cleared') || '';
+          });
+        }
+      })();
+    </script>
+  )}
+</BaseLayout>

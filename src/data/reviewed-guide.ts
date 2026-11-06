@@ -1,7 +1,7 @@
 export const reviewed = {
   "zh": {
-    "title": "高雄中央公園｜位置座標、捷運交通與開放資訊核對",
-    "description": "高雄中央公園與 R9 中央公園站分別怎麼找？整理市府公園資料、不同地址與座標來源、交通查詢、天氣及設施開放核對，附日期地圖快照。",
+    "title": "高雄中央公園旅遊指南｜捷運交通、園區景點、開放資訊與附近美食",
+    "description": "高雄中央公園旅遊攻略，整理捷運 R9 中央公園站、園區景觀與散步路線、開放資訊核對、活動查詢方式、停車與交通，並銜接新堀江、城市光廊及周邊餐飲的主題指南。",
     "name": "高雄中央公園",
     "subtitle": "Kaohsiung Central Park · 高雄市中心都市公園",
     "intro": "高雄旅遊網介紹中央公園面積約 12.7 公頃，設有人造湖、花園迷宮及水舞廣場。公園、捷運站與南側城市光廊是相關但不同的地點；本站協助區分位置、交通與現場開放資訊。",
@@ -79,7 +79,7 @@ export const reviewed = {
         "reviews",
         "Google 地圖日期快照",
         [
-          "4.5 / 5 · 16,489 則評價。資料取自2026-10-29核對的 Google 地圖日期快照，不會自動更新，並非本站收集的旅客評分。評價內容及資料權利屬原作者與 Google，最新資料請至原頁確認。"
+          "4.5 / 5 · 16,510 則評價。資料取自 2026 年 11 月提供的 Google 地圖評分快照，不會自動更新，並非本站收集的旅客評分。評價內容及資料權利屬原作者與 Google，最新資料請至原頁確認。"
         ]
       ]
     ],
@@ -111,8 +111,8 @@ export const reviewed = {
     ]
   },
   "en": {
-    "title": "Kaohsiung Central Park | Location, MRT R9 & Access Checks",
-    "description": "Locate Kaohsiung Central Park separately from MRT R9. Compare city and Maps addresses, check transport, access, facilities and fresh regional weather with dated sources.",
+    "title": "Kaohsiung Central Park Visitor Guide | MRT R9, Things to Do, Map & Nearby Food",
+    "description": "Plan a visit to Kaohsiung Central Park: MRT R9 and exits, park features and walking routes, address and map reference points, events and parking checks, plus nearby Shinkuchan and food guides — with dated, verifiable sources.",
     "name": "Kaohsiung Central Park",
     "subtitle": "高雄中央公園 · An urban park in central Kaohsiung",
     "intro": "Kaohsiung Travel describes a park of about 12.7 hectares with an artificial lake, garden maze and water square. The park, MRT station and Urban Spotlight Arcade are related places with separate access arrangements. This guide distinguishes location references from current operating information.",
@@ -190,7 +190,7 @@ export const reviewed = {
         "reviews",
         "Dated Google Maps snapshot",
         [
-          "4.5 / 5 from 16,489 reviews, manually checked 2026-10-29. This is a dated Google Maps snapshot and does not update automatically. These are not reviews collected by this site. Rights belong to the original authors and Google; consult the original listing for current information."
+          "4.5 / 5 from 16,510 reviews, from a Google Maps rating snapshot provided in November 2026. This is a dated snapshot and does not update automatically. These are not reviews collected by this site. Rights belong to the original authors and Google; consult the original listing for current information."
         ]
       ]
     ],

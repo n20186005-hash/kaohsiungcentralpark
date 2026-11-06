@@ -2,9 +2,14 @@ import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { TOPIC_SLUGS } from './src/data/topics.ts';
 
 const site = process.env.PUBLIC_SITE_URL || 'https://kaohsiungcentralpark.com';
 const cloudflareBuild = process.env.ASTRO_ADAPTER === 'cloudflare';
+const topicPages = TOPIC_SLUGS.flatMap(slug => [
+  `${site}/${slug}/`,
+  `${site}/en/${slug}/`,
+]);
 
 export default defineConfig({
   site,
@@ -18,7 +23,18 @@ export default defineConfig({
   //    產出 dist/client（靜態資源）+ dist/server（SSR worker），
   //    建置流程暫時隱藏根設定以避免遞迴導入，完成後恢復根包裝器設定供部署。
   adapter: cloudflareBuild ? cloudflare({ imageService: 'passthrough' }) : undefined,
-  integrations: site ? [sitemap({customPages:['https://kaohsiungcentralpark.com/','https://kaohsiungcentralpark.com/en/','https://kaohsiungcentralpark.com/photo-credits/'],filter:(url)=>!/(?:404|offline)(?:\/|$)/.test(url)})] : [],
+  integrations: site ? [sitemap({customPages:[
+    'https://kaohsiungcentralpark.com/',
+    'https://kaohsiungcentralpark.com/en/',
+    'https://kaohsiungcentralpark.com/photo-credits/',
+    'https://kaohsiungcentralpark.com/privacy-policy/',
+    'https://kaohsiungcentralpark.com/terms-of-service/',
+    'https://kaohsiungcentralpark.com/cookie-settings/',
+    'https://kaohsiungcentralpark.com/en/privacy-policy/',
+    'https://kaohsiungcentralpark.com/en/terms-of-service/',
+    'https://kaohsiungcentralpark.com/en/cookie-settings/',
+    ...topicPages,
+  ],filter:(url)=>!/(?:404|offline)(?:\/|$)/.test(url)})] : [],
   vite: {
     plugins: [tailwindcss()],
   },

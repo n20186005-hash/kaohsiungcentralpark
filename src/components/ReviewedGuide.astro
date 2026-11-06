@@ -1,6 +1,7 @@
 ---
 import {reviewed} from '../data/reviewed-guide';
 import RegionalWeather from './RegionalWeather.astro';
+import TopicLinks from './TopicLinks.astro';
 import type {Locale} from '../i18n';
 interface Props{locale:Locale;}
 const {locale}=Astro.props;const c=reviewed[locale];
@@ -40,5 +41,6 @@ const photos = [
 </section>)}
 <RegionalWeather locale={locale}/>
 <section id="faq"><h2>{locale==='en'?'Frequently asked questions':'常見問答'}</h2>{c.faq.map(([q,a])=><details class="faq"><summary>{q}</summary><p>{a}</p></details>)}</section>
+<TopicLinks locale={locale}/>
 <section id="sources"><h2>{locale==='en'?'Sources and review limits':'資料來源與核對範圍'}</h2><p>{locale==='en'?'Sources reviewed 2026-10-29 (Los Angeles). Page update dates are source metadata, not a fresh inspection of operations. Current admission, water-show schedules, parking rates and all-route accessibility remain unverified.':'資料查閱日2026-10-29（洛杉磯日期）。來源頁更新日不等於重新實勘營運狀況；現行統一票價、水舞場次、停車費及全程無障礙仍未核實。'}</p><ul><li><a href="https://khh.travel/zh-tw/attractions/detail/336/">{locale==='en'?'City park introduction (updated 2023-11-29): area, listed access, landscape and neighbouring places':'市府中央公園介紹（更新2023-11-29）：面積、開放列示、景觀與周邊位置'}</a></li><li><a href="https://khh.travel/zh-tw/attractions/detail/93/">{locale==='en'?'City MRT attraction page (updated 2022-06-14): station address and architecture background':'市府捷運站旅遊頁（更新2022-06-14）：站址與建築背景'}</a></li><li><a href="https://www.krtc.com.tw/Guide/station_info?n=R9">{locale==='en'?'Kaohsiung MRT operator: R9 station, plans and timetable links':'高雄捷運營運方：R9 車站、站圖與時刻表入口'}</a></li><li><a href="https://khh.travel/zh-tw/attractions/detail/271/">{locale==='en'?'City Urban Spotlight Arcade listing: separate attraction':'市府城市光廊頁：不同場域需另核對'}</a></li><li><a href="https://www.cwa.gov.tw/">{locale==='en'?'Central Weather Administration: official forecasts and warnings':'中央氣象署：官方預報及警特報'}</a></li><li><a href="https://maps.app.goo.gl/eC8hTJNhAbFwetQUA">{locale==='en'?'Google Maps: manual 2026-10-29 rating/address/accessibility snapshot':'Google 地圖：2026-10-29手工評分、地址及無障礙列示快照'}</a></li></ul></section>
 </div>
